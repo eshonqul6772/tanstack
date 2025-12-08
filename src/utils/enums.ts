@@ -1,0 +1,5 @@
+export enum MESSAGE_TYPE {
+	INFO = "INFO",
+	WARNING = "WARNING",
+	ERROR = "ERROR",
+}

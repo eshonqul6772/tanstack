@@ -1,7 +1,7 @@
 const App = () => {
-    return (
-        <>App</>
-    )
-}
+	return <>App</>;
 
-export default App
+	
+};
+
+export default App;

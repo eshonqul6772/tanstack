@@ -1,13 +1,14 @@
-import '@/bootstrap';
+import "@/bootstrap";
 
-import {StrictMode} from 'react';
-import {createRoot} from 'react-dom/client';
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import App from "@/App";
+import * as Providers from "@/providers";
 
-
-import App from './App.tsx';
-
-createRoot(document.getElementById('root')!).render(
-    <StrictMode>
-        <App/>
-    </StrictMode>,
-)
+createRoot(document.getElementById("root")!).render(
+	<StrictMode>
+		<Providers.QueryProvider>
+			<App />
+		</Providers.QueryProvider>
+	</StrictMode>,
+);
