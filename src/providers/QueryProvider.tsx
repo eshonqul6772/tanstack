@@ -10,13 +10,9 @@ import { MESSAGE_TYPE } from "@/utils/enums";
 const queryResponseHandler = (data: any) => {
 	const type = get(data, "data.message.type");
 	const message = get(data, "data.message.message");
-	const status = get(data, "data.status");
+
 
 	if (type && message) {
-		const props = {
-			key: status,
-			message: message,
-		} as any;
 
 		if (type === MESSAGE_TYPE.INFO) {
 			alert("info");
