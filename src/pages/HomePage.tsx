@@ -1,6 +1,10 @@
+import UsersTable from "@/pages/UsersTable";
+
 const HomePage = ()=>{
     return (
-        <>Home</>
+        <>
+            <UsersTable/>
+        </>
     )
 }
 

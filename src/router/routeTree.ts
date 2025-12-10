@@ -17,8 +17,8 @@ const createRouteFromConfig = (config: typeof allRoutes[number]) => {
 };
 
 const routes = Object.fromEntries(
-    allRoutes.map(config => [config.id, createRouteFromConfig(config)])
-) as Record<typeof allRoutes[number]['id'], ReturnType<typeof createRouteFromConfig>>;
+    allRoutes.map(config => [config.key, createRouteFromConfig(config)])
+) as Record<typeof allRoutes[number]['key'], ReturnType<typeof createRouteFromConfig>>;
 
 const rootRoute = createRootRoute({
     component: MainLayout,

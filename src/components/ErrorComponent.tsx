@@ -1,4 +1,6 @@
-const ErrorComponent = ()=>{
+import React from "react";
+
+const ErrorComponent:React.FC = ()=>{
     return (
         <div className="flex justify-center items-center h-screen">
             <div className="text-red-500 text-xl">Xatolik yuz berdi</div>

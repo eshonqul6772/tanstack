@@ -1,6 +1,6 @@
 export const allRoutes = [
     {
-        id: 'home',
+        key: 'home',
         path: '/',
         component: () => import('@/pages/HomePage'),
         metadata: {
@@ -9,7 +9,7 @@ export const allRoutes = [
         },
     },
     {
-        id: 'about',
+        key: 'about',
         path: '/about',
         component: () => import('@/pages/AboutPage'),
         metadata: {
@@ -18,7 +18,7 @@ export const allRoutes = [
         },
     },
     {
-        id: 'notfound',
+        key: 'notfound',
         path: '*',
         component: () => import('@/pages/NotFoundPage'),
         metadata: {
