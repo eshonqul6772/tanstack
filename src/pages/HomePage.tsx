@@ -1,6 +1,6 @@
 import UsersTable from "@/pages/UsersTable";
 
-const HomePage = ()=>{
+const HomePage = () => {
     return (
         <>
             <UsersTable/>

@@ -1,5 +1,5 @@
 import {lazy} from "react";
-import {createRootRoute, createRoute} from '@tanstack/react-router';
+import { createRoute, createRootRouteWithContext} from '@tanstack/react-router';
 
 import MainLayout from '@/layouts';
 
@@ -20,7 +20,7 @@ const routes = Object.fromEntries(
     allRoutes.map(config => [config.key, createRouteFromConfig(config)])
 ) as Record<typeof allRoutes[number]['key'], ReturnType<typeof createRouteFromConfig>>;
 
-const rootRoute = createRootRoute({
+const rootRoute = createRootRouteWithContext<{}>()({
     component: MainLayout,
     pendingComponent: Loading,
     errorComponent: ErrorComponent,
