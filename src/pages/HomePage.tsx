@@ -1,9 +1,8 @@
-import UsersTable from "@/pages/UsersTable";
 
 const HomePage = () => {
     return (
         <>
-            <UsersTable/>
+Home
         </>
     )
 }
