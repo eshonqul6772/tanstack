@@ -14,9 +14,6 @@ importers:
       '@tailwindcss/vite':
         specifier: ^4.1.17
         version: 4.1.17(vite@7.2.7(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(sass-embedded@1.93.3)(sass@1.93.3)(tsx@4.21.0))
-      '@tailwindcss/vite':
-        specifier: ^4.1.17
-        version: 4.1.17(vite@7.2.7(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(sass-embedded@1.93.3)(sass@1.93.3))
       '@tanstack/ai':
         specifier: ^0.0.2
         version: 0.0.2(@alcyone-labs/zod-to-json-schema@4.0.10(zod@4.1.13))(zod@4.1.13)
@@ -26,6 +23,9 @@ importers:
       '@tanstack/ai-react':
         specifier: ^0.0.2
         version: 0.0.2(@tanstack/ai-client@0.0.2(@alcyone-labs/zod-to-json-schema@4.0.10(zod@4.1.13))(zod@4.1.13))(@tanstack/ai@0.0.2(@alcyone-labs/zod-to-json-schema@4.0.10(zod@4.1.13))(zod@4.1.13))(@types/react@19.2.7)(react@19.2.1)
+      '@tanstack/react-form':
+        specifier: ^1.27.5
+        version: 1.27.5(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
       '@tanstack/react-query':
         specifier: ^5.90.12
         version: 5.90.12(react@19.2.1)
@@ -38,6 +38,9 @@ importers:
       axios:
         specifier: ^1.13.2
         version: 1.13.2
+      dayjs:
+        specifier: ^1.11.19
+        version: 1.11.19
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -86,13 +89,13 @@ importers:
         version: 19.2.3(@types/react@19.2.7)
       '@vitejs/plugin-react-swc':
         specifier: ^4.2.2
-        version: 4.2.2(vite@7.2.7(@types/node@24.10.1)(sass-embedded@1.93.3)(sass@1.93.3))
+        version: 4.2.2(vite@7.2.7(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(sass-embedded@1.93.3)(sass@1.93.3)(tsx@4.21.0))
       typescript:
         specifier: ~5.9.3
         version: 5.9.3
       vite:
         specifier: ^7.2.4
-        version: 7.2.7(@types/node@24.10.1)(sass-embedded@1.93.3)(sass@1.93.3)
+        version: 7.2.7(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(sass-embedded@1.93.3)(sass@1.93.3)(tsx@4.21.0)
 
 packages:
 
@@ -1020,15 +1023,31 @@ packages:
     peerDependencies:
       eslint: ^8.57.0 || ^9.0.0
 
+  '@tanstack/form-core@1.27.5':
+    resolution: {integrity: sha512-A8EriWfn+2QsxEbzt6AXn6CC6ILv3VPDXhBDAeE5LTiCHryy7xuj+zo1Q2JWBkhJxS1AuEgY1BZr5AP2mWiHQQ==}
+
   '@tanstack/history@1.140.0':
     resolution: {integrity: sha512-u+/dChlWlT3kYa/RmFP+E7xY5EnzvKEKcvKk+XrgWMpBWExQIh3RQX/eUqhqwCXJPNc4jfm1Coj8umnm/hDgyA==}
     engines: {node: '>=12'}
+
+  '@tanstack/pacer-lite@0.1.1':
+    resolution: {integrity: sha512-y/xtNPNt/YeyoVxE/JCx+T7yjEzpezmbb+toK8DDD1P4m7Kzs5YR956+7OKexG3f8aXgC3rLZl7b1V+yNUSy5w==}
+    engines: {node: '>=18'}
 
   '@tanstack/query-core@5.90.12':
     resolution: {integrity: sha512-T1/8t5DhV/SisWjDnaiU2drl6ySvsHj1bHBCWNXd+/T+Hh1cf6JodyEYMd5sgwm+b/mETT4EV3H+zCVczCU5hg==}
 
   '@tanstack/query-devtools@5.91.1':
     resolution: {integrity: sha512-l8bxjk6BMsCaVQH6NzQEE/bEgFy1hAs5qbgXl0xhzezlaQbPk6Mgz9BqEg2vTLPOHD8N4k+w/gdgCbEzecGyNg==}
+
+  '@tanstack/react-form@1.27.5':
+    resolution: {integrity: sha512-B0nSrlOh4+i/zq2U2ezyRYVz4+6vVzviVAFSZL3FCrJiwryEPM4/0E/RpwkbMZiY2UHp/4KHenPcBQZGhXS+tw==}
+    peerDependencies:
+      '@tanstack/react-start': '*'
+      react: ^17.0.0 || ^18.0.0 || ^19.0.0
+    peerDependenciesMeta:
+      '@tanstack/react-start':
+        optional: true
 
   '@tanstack/react-query-devtools@5.91.1':
     resolution: {integrity: sha512-tRnJYwEbH0kAOuToy8Ew7bJw1lX3AjkkgSlf/vzb+NpnqmHPdWM+lA2DSdGQSLi1SU0PDRrrCI1vnZnci96CsQ==}
@@ -1091,6 +1110,9 @@ packages:
     peerDependenciesMeta:
       csstype:
         optional: true
+
+  '@tanstack/store@0.7.7':
+    resolution: {integrity: sha512-xa6pTan1bcaqYDS9BDpSiS63qa6EoDkPN9RsRaxHuDdVDNntzq3xNwR5YKTU/V3SkSyC9T4YVOPh2zRQN0nhIQ==}
 
   '@tanstack/store@0.8.0':
     resolution: {integrity: sha512-Om+BO0YfMZe//X2z0uLF2j+75nQga6TpTJgLJQBiq85aOyZNIhkCgleNcud2KQg4k4v9Y9l+Uhru3qWMPGTOzQ==}
@@ -1270,6 +1292,9 @@ packages:
   csstype@3.2.3:
     resolution: {integrity: sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==}
 
+  dayjs@1.11.19:
+    resolution: {integrity: sha512-t5EcLVS6QPBNqM2z8fakk/NKel+Xzshgt8FFKAn+qwlD1pzZWxh0nVCrvFK7ZDb6XucZeF9z8C7CBWTRIVApAw==}
+
   debug@4.4.3:
     resolution: {integrity: sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA==}
     engines: {node: '>=6.0'}
@@ -1298,6 +1323,13 @@ packages:
   dunder-proto@1.0.1:
     resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
     engines: {node: '>= 0.4'}
+
+  electron-to-chromium@1.5.267:
+    resolution: {integrity: sha512-0Drusm6MVRXSOJpGbaSVgcQsuB4hEkMpHXaVstcPmhu5LIedxs1xNK/nIxmQIU/RPC0+1/o0AVZfBTkTNJOdUw==}
+
+  enhanced-resolve@5.18.3:
+    resolution: {integrity: sha512-d4lC8xfavMeBjzGr2vECC3fsGXziXZQyJxD868h2M/mBI3PwAuODxAkLkq5HYuvrPYcUtiLzsTo8U3PgX3Ocww==}
+    engines: {node: '>=10.13.0'}
 
   es-define-property@1.0.1:
     resolution: {integrity: sha512-e3nRfgfUZ4rNGL232gUgX06QNyyez04KdjFrF+LTRoOXmrOgFKDg4BCdsjW8EnT69eqdYGmRpJwiPVYNrCaW3g==}
@@ -1518,6 +1550,13 @@ packages:
   isexe@2.0.0:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
 
+  jiti@2.6.1:
+    resolution: {integrity: sha512-ekilCSN1jwRvIbgeg/57YFh8qQDNbwDb9xT/qu2DAHbFFZUicIl4ygVaAvzveMhMVr3LnpSKTNnwt8PoOfmKhQ==}
+    hasBin: true
+
+  js-tokens@4.0.0:
+    resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
+
   js-yaml@4.1.1:
     resolution: {integrity: sha512-qQKT4zQxXl8lLwBtHMWwaTcGfFOZviOJet3Oy/xmGk2gZH677CJM9EvtfdSkgWcATZhj/55JZ0rmy3myCT5lsA==}
     hasBin: true
@@ -1630,6 +1669,12 @@ packages:
 
   lodash@4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
+
+  lru-cache@5.1.1:
+    resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
+
+  magic-string@0.30.21:
+    resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
 
   math-intrinsics@1.1.0:
     resolution: {integrity: sha512-/IXtbwEk5HTPyEwyKX6hGkYXxM9nbj64B+ilVJnC/R6B0pH5G4V3b0pVbL7DBj4tkhBAppbQUlf6F6Xl9LHu1g==}
@@ -2383,7 +2428,10 @@ snapshots:
   '@esbuild/win32-x64@0.25.12':
     optional: true
 
-  '@eslint-community/eslint-utils@4.9.0(eslint@9.39.1)':
+  '@esbuild/win32-x64@0.27.1':
+    optional: true
+
+  '@eslint-community/eslint-utils@4.9.0(eslint@9.39.1(jiti@2.6.1))':
     dependencies:
       eslint: 9.39.1(jiti@2.6.1)
       eslint-visitor-keys: 3.4.3
@@ -2642,6 +2690,74 @@ snapshots:
     dependencies:
       '@swc/counter': 0.1.3
 
+  '@tailwindcss/node@4.1.17':
+    dependencies:
+      '@jridgewell/remapping': 2.3.5
+      enhanced-resolve: 5.18.3
+      jiti: 2.6.1
+      lightningcss: 1.30.2
+      magic-string: 0.30.21
+      source-map-js: 1.2.1
+      tailwindcss: 4.1.17
+
+  '@tailwindcss/oxide-android-arm64@4.1.17':
+    optional: true
+
+  '@tailwindcss/oxide-darwin-arm64@4.1.17':
+    optional: true
+
+  '@tailwindcss/oxide-darwin-x64@4.1.17':
+    optional: true
+
+  '@tailwindcss/oxide-freebsd-x64@4.1.17':
+    optional: true
+
+  '@tailwindcss/oxide-linux-arm-gnueabihf@4.1.17':
+    optional: true
+
+  '@tailwindcss/oxide-linux-arm64-gnu@4.1.17':
+    optional: true
+
+  '@tailwindcss/oxide-linux-arm64-musl@4.1.17':
+    optional: true
+
+  '@tailwindcss/oxide-linux-x64-gnu@4.1.17':
+    optional: true
+
+  '@tailwindcss/oxide-linux-x64-musl@4.1.17':
+    optional: true
+
+  '@tailwindcss/oxide-wasm32-wasi@4.1.17':
+    optional: true
+
+  '@tailwindcss/oxide-win32-arm64-msvc@4.1.17':
+    optional: true
+
+  '@tailwindcss/oxide-win32-x64-msvc@4.1.17':
+    optional: true
+
+  '@tailwindcss/oxide@4.1.17':
+    optionalDependencies:
+      '@tailwindcss/oxide-android-arm64': 4.1.17
+      '@tailwindcss/oxide-darwin-arm64': 4.1.17
+      '@tailwindcss/oxide-darwin-x64': 4.1.17
+      '@tailwindcss/oxide-freebsd-x64': 4.1.17
+      '@tailwindcss/oxide-linux-arm-gnueabihf': 4.1.17
+      '@tailwindcss/oxide-linux-arm64-gnu': 4.1.17
+      '@tailwindcss/oxide-linux-arm64-musl': 4.1.17
+      '@tailwindcss/oxide-linux-x64-gnu': 4.1.17
+      '@tailwindcss/oxide-linux-x64-musl': 4.1.17
+      '@tailwindcss/oxide-wasm32-wasi': 4.1.17
+      '@tailwindcss/oxide-win32-arm64-msvc': 4.1.17
+      '@tailwindcss/oxide-win32-x64-msvc': 4.1.17
+
+  '@tailwindcss/vite@4.1.17(vite@7.2.7(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(sass-embedded@1.93.3)(sass@1.93.3)(tsx@4.21.0))':
+    dependencies:
+      '@tailwindcss/node': 4.1.17
+      '@tailwindcss/oxide': 4.1.17
+      tailwindcss: 4.1.17
+      vite: 7.2.7(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(sass-embedded@1.93.3)(sass@1.93.3)(tsx@4.21.0)
+
   '@tanstack/ai-client@0.0.2(@alcyone-labs/zod-to-json-schema@4.0.10(zod@4.1.13))(zod@4.1.13)':
     dependencies:
       '@tanstack/ai': 0.0.2(@alcyone-labs/zod-to-json-schema@4.0.10(zod@4.1.13))(zod@4.1.13)
@@ -2684,7 +2800,27 @@ snapshots:
 
   '@tanstack/devtools-event-client@0.3.5': {}
 
-  '@tanstack/eslint-plugin-query@5.91.2(eslint@9.39.1)(typescript@5.9.3)':
+  '@tanstack/devtools-event-client@0.4.0': {}
+
+  '@tanstack/devtools-vite@0.3.12(vite@7.2.7(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(sass-embedded@1.93.3)(sass@1.93.3)(tsx@4.21.0))':
+    dependencies:
+      '@babel/core': 7.28.5
+      '@babel/generator': 7.28.5
+      '@babel/parser': 7.28.5
+      '@babel/traverse': 7.28.5
+      '@babel/types': 7.28.5
+      '@tanstack/devtools-client': 0.0.5
+      '@tanstack/devtools-event-bus': 0.3.3
+      chalk: 5.6.2
+      launch-editor: 2.12.0
+      picomatch: 4.0.3
+      vite: 7.2.7(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(sass-embedded@1.93.3)(sass@1.93.3)(tsx@4.21.0)
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+
+  '@tanstack/eslint-plugin-query@5.91.2(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)':
     dependencies:
       '@typescript-eslint/utils': 8.48.1(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
       eslint: 9.39.1(jiti@2.6.1)
@@ -2692,11 +2828,27 @@ snapshots:
       - supports-color
       - typescript
 
+  '@tanstack/form-core@1.27.5':
+    dependencies:
+      '@tanstack/devtools-event-client': 0.4.0
+      '@tanstack/pacer-lite': 0.1.1
+      '@tanstack/store': 0.7.7
+
   '@tanstack/history@1.140.0': {}
+
+  '@tanstack/pacer-lite@0.1.1': {}
 
   '@tanstack/query-core@5.90.12': {}
 
   '@tanstack/query-devtools@5.91.1': {}
+
+  '@tanstack/react-form@1.27.5(react-dom@19.2.1(react@19.2.1))(react@19.2.1)':
+    dependencies:
+      '@tanstack/form-core': 1.27.5
+      '@tanstack/react-store': 0.8.0(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+      react: 19.2.1
+    transitivePeerDependencies:
+      - react-dom
 
   '@tanstack/react-query-devtools@5.91.1(@tanstack/react-query@5.90.12(react@19.2.1))(react@19.2.1)':
     dependencies:
@@ -2775,6 +2927,8 @@ snapshots:
     optionalDependencies:
       csstype: 3.2.3
 
+  '@tanstack/store@0.7.7': {}
+
   '@tanstack/store@0.8.0': {}
 
   '@tanstack/table-core@8.21.3': {}
@@ -2848,11 +3002,11 @@ snapshots:
       '@typescript-eslint/types': 8.48.1
       eslint-visitor-keys: 4.2.1
 
-  '@vitejs/plugin-react-swc@4.2.2(vite@7.2.7(@types/node@24.10.1)(sass-embedded@1.93.3)(sass@1.93.3))':
+  '@vitejs/plugin-react-swc@4.2.2(vite@7.2.7(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(sass-embedded@1.93.3)(sass@1.93.3)(tsx@4.21.0))':
     dependencies:
       '@rolldown/pluginutils': 1.0.0-beta.47
       '@swc/core': 1.15.3
-      vite: 7.2.7(@types/node@24.10.1)(sass-embedded@1.93.3)(sass@1.93.3)
+      vite: 7.2.7(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(sass-embedded@1.93.3)(sass@1.93.3)(tsx@4.21.0)
     transitivePeerDependencies:
       - '@swc/helpers'
 
@@ -2962,6 +3116,8 @@ snapshots:
 
   csstype@3.2.3: {}
 
+  dayjs@1.11.19: {}
+
   debug@4.4.3:
     dependencies:
       ms: 2.1.3
@@ -2980,6 +3136,13 @@ snapshots:
       call-bind-apply-helpers: 1.0.2
       es-errors: 1.3.0
       gopd: 1.2.0
+
+  electron-to-chromium@1.5.267: {}
+
+  enhanced-resolve@5.18.3:
+    dependencies:
+      graceful-fs: 4.2.11
+      tapable: 2.3.0
 
   es-define-property@1.0.1: {}
 
@@ -3248,6 +3411,10 @@ snapshots:
 
   isexe@2.0.0: {}
 
+  jiti@2.6.1: {}
+
+  js-tokens@4.0.0: {}
+
   js-yaml@4.1.1:
     dependencies:
       argparse: 2.0.1
@@ -3332,6 +3499,14 @@ snapshots:
   lodash.merge@4.6.2: {}
 
   lodash@4.17.21: {}
+
+  lru-cache@5.1.1:
+    dependencies:
+      yallist: 3.1.1
+
+  magic-string@0.30.21:
+    dependencies:
+      '@jridgewell/sourcemap-codec': 1.5.5
 
   math-intrinsics@1.1.0: {}
 
@@ -3669,7 +3844,7 @@ snapshots:
 
   varint@6.0.0: {}
 
-  vite@7.2.7(@types/node@24.10.1)(sass-embedded@1.93.3)(sass@1.93.3):
+  vite@7.2.7(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(sass-embedded@1.93.3)(sass@1.93.3)(tsx@4.21.0):
     dependencies:
       esbuild: 0.25.12
       fdir: 6.5.0(picomatch@4.0.3)

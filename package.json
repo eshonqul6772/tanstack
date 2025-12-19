@@ -12,16 +12,17 @@
 		"check": "biome check . --write"
 	},
 	"dependencies": {
-		"@tailwindcss/vite": "^4.1.17",
 		"@faker-js/faker": "^10.1.0",
 		"@tailwindcss/vite": "^4.1.17",
 		"@tanstack/ai": "^0.0.2",
 		"@tanstack/ai-openai": "^0.0.2",
 		"@tanstack/ai-react": "^0.0.2",
+		"@tanstack/react-form": "^1.27.5",
 		"@tanstack/react-query": "^5.90.12",
 		"@tanstack/react-router": "^1.140.0",
 		"@tanstack/react-table": "^8.21.3",
 		"axios": "^1.13.2",
+		"dayjs": "^1.11.19",
 		"lodash": "^4.17.21",
 		"react": "^19.2.0",
 		"react-dom": "^19.2.0",
