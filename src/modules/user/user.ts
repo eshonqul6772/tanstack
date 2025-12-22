@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { Filters, PaginatedData } from './types'
+import { Filters, PaginatedData } from './types.ts'
 
 const DEFAULT_PAGE = 0
 const DEFAULT_PAGE_SIZE = 10

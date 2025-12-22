@@ -1,26 +1,26 @@
 export const allRoutes = [
     {
-        key: 'home',
-        path: '/',
-        component: () => import('@/pages/HomePage'),
+        key: 'login',
+        path: '/login',
+        component: () => import('@/pages/Login'),
         metadata: {
-            title: 'Home',
+            title: 'Login',
             requiresAuth: false,
         },
     },
     {
-        key: 'about',
-        path: '/about',
-        component: () => import('@/pages/AboutPage'),
+        key: 'dashboard',
+        path: '/dashboard',
+        component: () => import('@/pages/Dashboard'),
         metadata: {
-            title: 'About',
-            requiresAuth: false,
+            title: 'NotFound',
+            requiresAuth: true,
         },
     },
     {
         key: 'notfound',
         path: '*',
-        component: () => import('@/pages/NotFoundPage'),
+        component: () => import('@/pages/NotFound'),
         metadata: {
             title: 'notFound',
             requiresAuth: false,

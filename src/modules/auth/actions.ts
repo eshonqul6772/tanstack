@@ -1,19 +1,19 @@
-import { action } from 'typesafe-actions';
+import { createAction } from 'typesafe-actions';
 
 import * as Types from './types';
 import * as Constants from './constants';
 
 export const Login = {
-  request: () => action(Constants.LOGIN.REQUEST),
-  success: (args: Types.IAction.Login.Success) => action(Constants.LOGIN.SUCCESS, args),
+    request: createAction(Constants.LOGIN.REQUEST)(),
+    success: createAction(Constants.LOGIN.SUCCESS, (args: Types.IAction.Login.Success) => args)(),
 };
 
 export const Profile = {
-  request: () => action(Constants.PROFILE.REQUEST),
-  success: (args: Types.IAction.Profile.Success) => action(Constants.PROFILE.SUCCESS, args),
+    request: createAction(Constants.PROFILE.REQUEST)(),
+    success: createAction(Constants.PROFILE.SUCCESS, (args: Types.IAction.Profile.Success) => args)(),
 };
 
 export const Logout = {
-  request: () => action(Constants.LOGOUT.REQUEST),
-  success: () => action(Constants.LOGOUT.SUCCESS),
+    request: createAction(Constants.LOGOUT.REQUEST)(),
+    success: createAction(Constants.LOGOUT.SUCCESS)(),
 };

@@ -8,7 +8,7 @@ import {
     SortingState,
     useReactTable,
 } from '@tanstack/react-table'
-import { Filters } from '@/api/types'
+import { Filters } from '@/modules/user/types'
 import { DebouncedInput } from './debouncedInput'
 
 export const DEFAULT_PAGE_INDEX = 0

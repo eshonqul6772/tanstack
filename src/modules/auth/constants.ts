@@ -1,16 +1,16 @@
 export const ENTITY = 'AUTH';
 
-export enum LOGIN {
-  REQUEST = '@@AUTH/LOGIN/REQUEST',
-  SUCCESS = '@@AUTH/LOGIN/SUCCESS',
-}
+export const LOGIN = {
+  REQUEST:  '@@AUTH/LOGIN/REQUEST',
+  SUCCESS: '@@AUTH/LOGIN/SUCCESS',
+} as const;
 
-export enum PROFILE {
-  REQUEST = '@@AUTH/PROFILE/REQUEST',
-  SUCCESS = '@@AUTH/PROFILE/SUCCESS',
-}
+export const PROFILE = {
+  REQUEST : '@@AUTH/PROFILE/REQUEST',
+  SUCCESS : '@@AUTH/PROFILE/SUCCESS',
+} as const;
 
-export enum LOGOUT {
-  REQUEST = '@@AUTH/LOGOUT/REQUEST',
-  SUCCESS = '@@AUTH/LOGOUT/SUCCESS',
-}
+export const LOGOUT = {
+  REQUEST : '@@AUTH/LOGOUT/REQUEST',
+  SUCCESS : '@@AUTH/LOGOUT/SUCCESS',
+} as const;

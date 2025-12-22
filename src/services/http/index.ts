@@ -4,11 +4,11 @@ import axios, {
     AxiosRequestConfig,
     InternalAxiosRequestConfig,
 } from 'axios';
-import { get } from 'lodash';
+import get from 'lodash/get';
 
 import AuthContext from '@/providers/AuthProvider';
 import * as Actions from '@/modules/auth/actions';
-import { MESSAGE_TYPE } from '@/utils/enums';
+import {MESSAGE_TYPE} from '@/utils/enums';
 
 const store = AuthContext();
 
@@ -46,7 +46,7 @@ class Http {
 
     /* ================= INIT ================= */
 
-    public init({ config, configFn }: InitOptions = {}) {
+    public init({config, configFn}: InitOptions = {}) {
         if (this.instance) return this.instance;
 
         this.instance = axios.create({
@@ -69,7 +69,7 @@ class Http {
             async (config) => {
                 if (configFn) {
                     const newConfig = await configFn(config);
-                    return { ...config, ...newConfig };
+                    return {...config, ...newConfig};
                 }
                 return config;
             },
@@ -86,7 +86,7 @@ class Http {
     /* ================= ERRORS ================= */
 
     private async handleResponseError(error: AxiosError) {
-        const { response, config } = error;
+        const {response, config} = error;
 
         if (response?.data) {
             this.showNotification(response.data);
@@ -137,7 +137,7 @@ class Http {
         this.isRefreshing = true;
 
         try {
-            const token = await this.requestNewAccessToken();
+            const token = store.state.token;
             this.resolveQueue(token);
 
             originalRequest.headers = {
@@ -153,26 +153,6 @@ class Http {
         } finally {
             this.isRefreshing = false;
         }
-    }
-
-    private requestNewAccessToken(): Promise<string> {
-        return new Promise((resolve, reject) => {
-            const unsubscribe = store.subscribe(() => {
-                const { auth } = store.getState() as Types.IState;
-
-                if (auth.accessToken) {
-                    unsubscribe();
-                    resolve(auth.accessToken);
-                }
-            });
-
-            store.dispatch(Actions.Login.request());
-
-            setTimeout(() => {
-                unsubscribe();
-                reject(new Error('Refresh token timeout'));
-            }, 15000);
-        });
     }
 
     private resolveQueue(token: string) {

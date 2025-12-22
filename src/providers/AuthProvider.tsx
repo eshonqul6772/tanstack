@@ -1,18 +1,31 @@
-import React, {createContext, useContext} from 'react';
+import {ActionType} from 'typesafe-actions';
+import React, {createContext, useContext, ReactNode} from 'react';
+
 import * as Types from '@/modules/auth/types';
-import * as Action from '@/modules/auth/actions';
+import * as Actions from '@/modules/auth/actions';
 
 interface Context {
     state: Types.IState;
-    dispatch: React.Dispatch<Action>;
+    dispatch: React.Dispatch<ActionType<typeof Actions>>;
 }
 
 export const AuthContext = createContext<Context | null>(null);
 
-const useAuthProvider: () => Context = () => {
-    const ctx = useContext(AuthContext);
-    if (!ctx) throw new Error('AuthProvider not found');
-    return ctx;
+export const useAuth = (): Context => {
+    const context = useContext(AuthContext);
+    if (!context) {
+        throw new Error('useAuth must be used within AuthProvider');
+    }
+    return context;
 };
 
-export default useAuthProvider;
+interface AuthProviderProps {
+    children: ReactNode;
+    value: Context;
+}
+
+export const AuthProviderComp: React.FC<AuthProviderProps> = ({children, value}) => (
+    <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+);
+
+export default useAuth;

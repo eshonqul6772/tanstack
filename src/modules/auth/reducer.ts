@@ -1,4 +1,5 @@
 import {getFile, getIdAndName} from '@/utils/mappers';
+import {ActionType} from 'typesafe-actions'
 
 import * as Types from './types';
 import * as Actions from './actions';
@@ -23,8 +24,8 @@ export const initialState: Types.IState = {
 };
 
 export const authReducer = (
-    state: Types.IState,
-    action: Actions,
+    state: Types.IState = initialState,
+    action: ActionType<typeof Actions>,
 ): Types.IState => {
     switch (action.type) {
         case Constants.LOGIN.SUCCESS: {

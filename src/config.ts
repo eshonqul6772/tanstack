@@ -11,7 +11,7 @@ const config = {
 		editorApiKey: ENV.VITE_APP_EDITOR_API_KEY,
 	},
 	api: {
-		baseUrl: BASE_URL + "/api/v1",
+		baseUrl: BASE_URL + "/user/v1",
 	},
 	sentry: {
 		dsn: ENV.VITE_APP_SENTRY_DSN,
