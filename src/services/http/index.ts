@@ -4,11 +4,13 @@ import axios, {
     AxiosRequestConfig,
     InternalAxiosRequestConfig,
 } from 'axios';
-import {get} from 'lodash';
+import { get } from 'lodash';
 
-// import {store, Types} from '@/store';
-// import * as Actions from '@/modules/auth/actions';
-import {MESSAGE_TYPE} from '@/utils/enums';
+import AuthContext from '@/providers/AuthProvider';
+import * as Actions from '@/modules/auth/actions';
+import { MESSAGE_TYPE } from '@/utils/enums';
+
+const store = AuthContext();
 
 const StatusCode = {
     Unauthorized: 401,
@@ -17,13 +19,20 @@ const StatusCode = {
     InternalServerError: 500,
 } as const;
 
+type InitOptions = {
+    config?: AxiosRequestConfig;
+    configFn?: (
+        config: InternalAxiosRequestConfig
+    ) => InternalAxiosRequestConfig | Promise<InternalAxiosRequestConfig>;
+};
+
 type RefreshQueueItem = {
     resolve: (token: string) => void;
     reject: (error: unknown) => void;
 };
 
 class Http {
-    private instance: AxiosInstance | null = null;
+    private instance!: AxiosInstance;
 
     private isRefreshing = false;
     private refreshQueue: RefreshQueueItem[] = [];
@@ -37,34 +46,38 @@ class Http {
 
     /* ================= INIT ================= */
 
-    private createInstance(config?: AxiosRequestConfig): AxiosInstance {
-        const instance = axios.create({
+    public init({ config, configFn }: InitOptions = {}) {
+        if (this.instance) return this.instance;
+
+        this.instance = axios.create({
             ...this.defaultConfig,
             ...config,
         });
 
-        this.attachInterceptors(instance);
+        this.attachInterceptors(configFn);
 
-        return instance;
+        return this.instance;
     }
 
-    private attachInterceptors(instance: AxiosInstance) {
+    /* ================= INTERCEPTORS ================= */
+
+    private attachInterceptors(
+        configFn?: InitOptions['configFn'],
+    ) {
         /* ===== REQUEST ===== */
-        instance.interceptors.request.use(
-            (config: InternalAxiosRequestConfig) => {
-                // const {auth} = store.getState() as Types.IState;
-
-                // if (auth.accessToken) {
-                //     config.headers.Authorization = `Bearer ${auth.accessToken}`;
-                // }
-
+        this.instance.interceptors.request.use(
+            async (config) => {
+                if (configFn) {
+                    const newConfig = await configFn(config);
+                    return { ...config, ...newConfig };
+                }
                 return config;
             },
-            error => Promise.reject(error),
+            Promise.reject,
         );
 
         /* ===== RESPONSE ===== */
-        instance.interceptors.response.use(
+        this.instance.interceptors.response.use(
             response => response,
             error => this.handleResponseError(error),
         );
@@ -73,7 +86,7 @@ class Http {
     /* ================= ERRORS ================= */
 
     private async handleResponseError(error: AxiosError) {
-        const {response, config} = error;
+        const { response, config } = error;
 
         if (response?.data) {
             this.showNotification(response.data);
@@ -102,7 +115,7 @@ class Http {
 
     private async handle401(originalRequest: AxiosRequestConfig) {
         if (originalRequest.url?.includes('refresh-token')) {
-            // store.dispatch(Actions.Logout.request());
+            store.dispatch(Actions.Logout.request());
             return Promise.reject('Session expired');
         }
 
@@ -114,7 +127,7 @@ class Http {
                             ...originalRequest.headers,
                             Authorization: `Bearer ${token}`,
                         };
-                        resolve(this.http(originalRequest));
+                        resolve(this.request(originalRequest));
                     },
                     reject,
                 });
@@ -124,18 +137,18 @@ class Http {
         this.isRefreshing = true;
 
         try {
-            const accessToken = await this.requestNewAccessToken();
-            this.resolveQueue(accessToken);
+            const token = await this.requestNewAccessToken();
+            this.resolveQueue(token);
 
             originalRequest.headers = {
                 ...originalRequest.headers,
-                Authorization: `Bearer ${accessToken}`,
+                Authorization: `Bearer ${token}`,
             };
 
-            return this.http(originalRequest);
+            return this.request(originalRequest);
         } catch (err) {
             this.rejectQueue(err);
-            // store.dispatch(Actions.Logout.request());
+            store.dispatch(Actions.Logout.request());
             return Promise.reject(err);
         } finally {
             this.isRefreshing = false;
@@ -143,20 +156,20 @@ class Http {
     }
 
     private requestNewAccessToken(): Promise<string> {
-        return new Promise((_resolve: any, reject) => {
-            // const unsubscribe = store.subscribe(() => {
-            //     const {auth} = store.getState() as Types.IState;
-            //
-            //     if (auth.accessToken) {
-            //         unsubscribe();
-            //         resolve(auth.accessToken);
-            //     }
-            // });
+        return new Promise((resolve, reject) => {
+            const unsubscribe = store.subscribe(() => {
+                const { auth } = store.getState() as Types.IState;
 
-            // store.dispatch(Actions.AccessToken.request());
+                if (auth.accessToken) {
+                    unsubscribe();
+                    resolve(auth.accessToken);
+                }
+            });
+
+            store.dispatch(Actions.Login.request());
 
             setTimeout(() => {
-                // unsubscribe();
+                unsubscribe();
                 reject(new Error('Refresh token timeout'));
             }, 15000);
         });
@@ -180,32 +193,22 @@ class Http {
 
         if (!code || !type) return;
 
-        const notification = {
-            info: 'info',
-            warning: 'warning',
-            error: 'error',
-        }
-
-        const map: any = {
-            [MESSAGE_TYPE.INFO]: notification.info,
-            [MESSAGE_TYPE.WARNING]: notification.warning,
-            [MESSAGE_TYPE.ERROR]: notification.error,
+        const map: Record<string, Function> = {
+            [MESSAGE_TYPE.INFO]: console.info,
+            [MESSAGE_TYPE.WARNING]: console.warn,
+            [MESSAGE_TYPE.ERROR]: console.error,
         };
 
-        map[type]?.({message: code});
+        map[type]?.(code);
     }
 
     /* ================= PUBLIC ================= */
 
-    private get http(): AxiosInstance {
+    public request<T = any>(config: AxiosRequestConfig) {
         if (!this.instance) {
-            this.instance = this.createInstance();
+            throw new Error('Http is not initialized. Call Http.init() first.');
         }
-        return this.instance;
-    }
-
-    public get request(): AxiosInstance {
-        return this.http;
+        return this.instance.request<T>(config);
     }
 }
 

@@ -1,0 +1,29 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--color-white);
+}
+
+.content {
+  width: 500px;
+  padding: 100px 50px;
+  background-color: var(--color-muted);
+  border-radius: var(--radius-md);
+}
+
+.info {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.logo {
+  margin-bottom: 10px;
+}
+
+.name {
+  font-weight: 500;
+  font-size: 18px;
+}
