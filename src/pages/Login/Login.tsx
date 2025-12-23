@@ -1,6 +1,4 @@
 import React from 'react';
-import {useTranslation} from 'react-i18next';
-import {useNavigate} from '@tanstack/react-router';
 import { Grid, Button,Loader  } from '@mantine/core';
 
 import {useAuth} from '@/providers/AuthProvider';
@@ -12,24 +10,16 @@ import * as Fields from '@/containers/Fields';
 import cls from './Login.module.scss';
 
 const Login: React.FC = () => {
-    const {t} = useTranslation();
     const {dispatch} = useAuth();
-    const navigate = useNavigate();
 
     return (
         <div className={cls.wrapper}>
             <div className={cls.content}>
-                <div className={cls.info}>
-                    <div className={cls.name}>{t('admin_panel')}</div>
-                </div>
+
 
                 <Forms.Login
                     onSuccess={token => {
-                        console.log(t('successfully_login'));
                         dispatch(Actions.Login.success({token}));
-                        navigate({
-                            to: '/',
-                        }).then(r => r);
                     }}
                 >
                     {form => (
@@ -62,7 +52,7 @@ const Login: React.FC = () => {
                                         variant="solid"
                                         size="large"
                                     >
-                                        {t('action_login')}
+                                        'action_login
                                     </Button>
                                 </Grid.Col>
                             </Grid>

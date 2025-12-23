@@ -1,8 +1,8 @@
 import "@/assets/style/main.scss";
 
 import config from '@/config';
-import AuthContext from '@/providers/AuthProvider';
-import {http, i18n, sto rage} from '@/services';
+import { useAuth } from '@/modules/auth/hooks';
+import {http, i18n, storage} from '@/services';
 
 if (config.app.isDev) {
     console.log('%cADMIN DEVELOPMENT MODE', 'color: red; font-size: 32px;');
@@ -26,8 +26,7 @@ http.init({
         timeout: 15000,
     },
     configFn: (config) => {
-        const {state} = AuthContext();
-        const token = state.token;
+        const { token } = useAuth();
 
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
