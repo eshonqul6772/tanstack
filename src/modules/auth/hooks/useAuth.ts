@@ -1,9 +1,9 @@
-import { AuthContext } from '@/providers/AuthProvider';
+import { useAuth } from '@/providers/AuthProvider';
 
 import * as Constants from '../constants'
 
-const useAuth = () => {
-  const { state, dispatch } = AuthContext({value: state});
+const useAuthHook = () => {
+  const { state, dispatch } = useAuth();
 
   return {
     isAuthenticated: state.isAuthenticated,
@@ -17,4 +17,4 @@ const useAuth = () => {
   };
 };
 
-export default useAuth;
+export default useAuthHook;

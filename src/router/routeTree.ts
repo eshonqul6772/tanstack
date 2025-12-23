@@ -1,52 +1,56 @@
-import { lazy, Suspense } from 'react';
-import { createRoute, createRootRouteWithContext } from '@tanstack/react-router';
+import {lazy} from "react";
+import {
+    createRoute,
+    createRootRouteWithContext,
+    redirect,
+} from '@tanstack/react-router';
 
 import MainLayout from '@/layouts';
 import Loading from '@/components/Loading';
 import ErrorComponent from '@/components/ErrorComponent';
-import CheckPermission from '@/requires/CheckPermission';
 
-import { allRoutes } from './routes';
-import { PERMISSIONS } from '@/utils/enums';
-import { useAuth } from '@/modules/auth/hooks';
+import {allRoutes} from './routes';
 
-// 1️⃣ Root route
-const rootRoute = createRootRouteWithContext<{}>()({
+interface RouterContext {
+    auth: {
+        isAuthenticated: boolean;
+        login: () => void;
+        logout: () => void;
+    };
+}
+
+const rootRoute = createRootRouteWithContext<RouterContext>()({
     component: MainLayout,
     pendingComponent: Loading,
     errorComponent: ErrorComponent,
 });
 
-// 2️⃣ Route yaratish
-const createRouteFromConfig = (config: typeof allRoutes[number]) =>
-    createRoute({
+const createRouteFromConfig = (config: typeof allRoutes[number]) => {
+    console.log('config', config);
+    const baseRoute: any = createRoute({
         getParentRoute: () => rootRoute,
         path: config.path,
-        component: lazy(() =>
-            config.component().then((m) => ({
-                default: (props: any) => {
-                    const { isAuthenticated, isFetched } = useAuth();
-
-                    // Auth tekshiruvi
-                    if (!config.metadata.requiresAuth) {
-                        return <m.default {...props} />;
-                    }
-
-                    if (!isFetched) return <Loading full />;
-
-                    if (!isAuthenticated) return <m.default {...props} />;
-
-                    // Permission tekshiruvi
-                    const permission: PERMISSIONS = PERMISSIONS.VIEW_DASHBOARD; // Masalan, route uchun belgilash kerak
-                    return <CheckPermission permission={permission} page={<m.default {...props} />} />;
-                },
-                }))
-        ),
+        component: lazy(() => config.component().then(m => ({default: m.default}))),
     });
+
+    if (config.metadata.requiresAuth) {
+        return baseRoute.beforeLoad(({context, location}: any) => {
+            if (!context.auth?.isAuthenticated) {
+                throw redirect({
+                    to: '/login',
+                    search: {
+                        redirect: location.href,
+                    },
+                });
+            }
+        });
+    }
+
+    return baseRoute;
+};
 
 const routes = Object.fromEntries(
     allRoutes.map((config) => [config.key, createRouteFromConfig(config)])
-) as Record<typeof allRoutes[number]['key'], ReturnType<typeof createRouteFromConfig>>;
+);
 
 export const routeTree = rootRoute.addChildren(Object.values(routes));
-export { rootRoute };

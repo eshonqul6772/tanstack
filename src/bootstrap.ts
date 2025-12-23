@@ -2,7 +2,7 @@ import "@/assets/style/main.scss";
 
 import config from '@/config';
 import AuthContext from '@/providers/AuthProvider';
-import {http, i18n, storage} from '@/services';
+import {http, i18n, sto rage} from '@/services';
 
 if (config.app.isDev) {
     console.log('%cADMIN DEVELOPMENT MODE', 'color: red; font-size: 32px;');
