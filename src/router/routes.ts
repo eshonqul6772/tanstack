@@ -13,7 +13,7 @@ export const allRoutes = [
         path: '/dashboard',
         component: () => import('@/pages/Dashboard'),
         metadata: {
-            title: 'NotFound',
+            title: 'Dashboard',
             requiresAuth: true,
         },
     },
@@ -22,8 +22,12 @@ export const allRoutes = [
         path: '*',
         component: () => import('@/pages/NotFound'),
         metadata: {
-            title: 'notFound',
+            title: 'Page Not Found',
             requiresAuth: false,
         },
     },
 ] as const;
+
+export type RouteKey = typeof allRoutes[number]['key'];
+export type RoutePath = typeof allRoutes[number]['path'];
+export type RouteMetadata = typeof allRoutes[number]['metadata'];

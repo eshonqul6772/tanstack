@@ -1,12 +1,12 @@
 import {TanStackRouterDevtools} from "@tanstack/react-router-devtools";
 import {RouterProvider as TanstackRouterProvider, createRouter} from '@tanstack/react-router';
 
-import { useAuth } from '@/modules/auth/hooks'
+import HttpInitializer from "@/bootstrap";
+
+import {useAuth} from '@/modules/auth/hooks/useAuth'
 
 import config from "@/config.ts";
 import {routeTree} from '@/router/routeTree';
-
-const auth:any  = useAuth();
 
 const router = createRouter({
     routeTree,
@@ -25,9 +25,11 @@ declare module '@tanstack/react-router' {
 
 
 const RouterProvider = () => {
+    const auth: any = useAuth();
     return (
         <>
-            <TanstackRouterProvider router={router} context={{ auth }}/>
+            <HttpInitializer/>
+            <TanstackRouterProvider router={router} context={{auth}}/>
             {config.app.isDev && <TanStackRouterDevtools router={router} initialIsOpen={false}/>}
         </>
     );

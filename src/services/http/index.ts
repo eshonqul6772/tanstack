@@ -1,3 +1,4 @@
+// http.ts
 import axios, {
     AxiosError,
     AxiosInstance,
@@ -6,11 +7,22 @@ import axios, {
 } from 'axios';
 import get from 'lodash/get';
 
-import AuthContext from '@/providers/AuthProvider';
+import {useAuth} from '@/providers/AuthProvider';
 import * as Actions from '@/modules/auth/actions';
 import {MESSAGE_TYPE} from '@/utils/enums';
 
-const store = AuthContext();
+let store: ReturnType<typeof useAuth> | null = null;
+
+export const setAuthStore = (authStore: ReturnType<typeof useAuth>) => {
+    store = authStore;
+};
+
+const getStore = () => {
+    if (!store) {
+        throw new Error('Auth store is not initialized. Call setAuthStore() first.');
+    }
+    return store;
+};
 
 const StatusCode = {
     Unauthorized: 401,
@@ -114,6 +126,8 @@ class Http {
     /* ================= REFRESH TOKEN ================= */
 
     private async handle401(originalRequest: AxiosRequestConfig) {
+        const store = getStore(); // Har safar yangi olish
+
         if (originalRequest.url?.includes('refresh-token')) {
             store.dispatch(Actions.Logout.request());
             return Promise.reject('Session expired');

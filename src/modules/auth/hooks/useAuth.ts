@@ -1,20 +1,27 @@
-import { useAuth } from '@/providers/AuthProvider';
-
+import {useAuth as useAuthOriginal} from '@/providers/AuthProvider';
 import * as Constants from '../constants'
 
-const useAuthHook = () => {
-  const { state, dispatch } = useAuth();
+let globalAuthStore: any = null;
 
-  return {
-    isAuthenticated: state.isAuthenticated,
-    isFetched: state.isFetched,
-    token: state.token,
-    profile: state.profile,
+export const useAuth = () => {
+    const {state, dispatch} = useAuthOriginal();
 
-    methods: {
-      logout: () => dispatch({ type: Constants.LOGOUT.REQUEST }),
-    },
-  };
+    const authObj = {
+        isAuthenticated: state.isAuthenticated,
+        isFetched: state.isFetched,
+        token: state.token,
+        profile: state.profile,
+        state,
+        dispatch,
+
+        methods: {
+            logout: () => dispatch({type: Constants.LOGOUT.REQUEST}),
+        },
+    };
+
+    globalAuthStore = authObj;
+
+    return authObj;
 };
 
-export default useAuthHook;
+export const getAuthStore = () => globalAuthStore;

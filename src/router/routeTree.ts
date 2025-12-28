@@ -3,6 +3,7 @@ import {
     createRoute,
     createRootRouteWithContext,
     redirect,
+    type Route,
 } from '@tanstack/react-router';
 
 import MainLayout from '@/layouts';
@@ -25,32 +26,45 @@ const rootRoute = createRootRouteWithContext<RouterContext>()({
     errorComponent: ErrorComponent,
 });
 
-const createRouteFromConfig = (config: typeof allRoutes[number]) => {
-    console.log('config', config);
-    const baseRoute: any = createRoute({
+const createAppRoute = (config: typeof allRoutes[number]): Route<any> => {
+    const LazyComponent = lazy(() =>
+        config.component().then(m => ({default: m.default}))
+    );
+
+    const routeConfig: any = {
         getParentRoute: () => rootRoute,
         path: config.path,
-        component: lazy(() => config.component().then(m => ({default: m.default}))),
-    });
+        component: LazyComponent,
+    };
 
-    if (config.metadata.requiresAuth) {
-        return baseRoute.beforeLoad(({context, location}: any) => {
-            if (!context.auth?.isAuthenticated) {
+    console.log('auth', config);
+
+    if (!config.metadata.requiresAuth) {
+        routeConfig.beforeLoad = ({context, location}: {
+            context: RouterContext;
+            location: Location
+        }) => {
+            if (!context.auth.isAuthenticated) {
                 throw redirect({
                     to: '/login',
-                    search: {
-                        redirect: location.href,
-                    },
+                    search: {redirect: location.href},
                 });
             }
-        });
+        };
     }
 
-    return baseRoute;
+    return createRoute(routeConfig);
 };
 
-const routes = Object.fromEntries(
-    allRoutes.map((config) => [config.key, createRouteFromConfig(config)])
+// Barcha route'larni yaratish
+const appRoutes = allRoutes.map(createAppRoute);
+
+// Route tree
+export const routeTree = rootRoute.addChildren(appRoutes);
+
+// Route'larni key bo'yicha object sifatida ham saqlash (agar kerak bo'lsa)
+export const routeMap = Object.fromEntries(
+    allRoutes.map((config, index) => [config.key, appRoutes[index]])
 );
 
-export const routeTree = rootRoute.addChildren(Object.values(routes));
+export {rootRoute};
