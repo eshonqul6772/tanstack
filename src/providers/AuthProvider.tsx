@@ -9,7 +9,7 @@ interface Context {
     dispatch: React.Dispatch<ActionType<typeof Actions>>;
 }
 
-export const AuthContext = createContext<Context | null>(null);
+export const AuthContext = createContext<Context | undefined>(undefined);
 
 export const useAuth = (): Context => {
     const context = useContext(AuthContext);
@@ -27,5 +27,3 @@ interface AuthProviderProps {
 export const AuthProviderComp: React.FC<AuthProviderProps> = ({children, value}) => (
     <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 );
-
-export default useAuth;
