@@ -25,11 +25,22 @@ declare module '@tanstack/react-router' {
 
 
 const RouterProvider = () => {
-    const auth: any = useAuth();
+    const auth = useAuth();
+    
+    // Router context uchun adapter
+    const routerContext = {
+        auth: {
+            isAuthenticated: auth.isAuthenticated,
+            isFetched: auth.isFetched,
+            token: auth.token || '',
+            logout: () => auth.methods.logout(),
+        },
+    };
+
     return (
         <>
             <HttpInitializer/>
-            <TanstackRouterProvider router={router} context={{auth}}/>
+            <TanstackRouterProvider router={router} context={routerContext}/>
             {config.app.isDev && <TanStackRouterDevtools router={router} initialIsOpen={false}/>}
         </>
     );
