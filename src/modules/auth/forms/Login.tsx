@@ -31,7 +31,7 @@ const Login: React.FC<IProps> = ({onSuccess, onError, children}) => {
     const mutation = useMutation<Types.IEntity.Token, string, IFormValues>({
         mutationFn: async values => {
             const {data} = await Api.Login({values});
-            return Mappers.getToken(data && data.data);
+            return Mappers.getToken(data.data.accessToken);
         },
         onSuccess,
         onError,

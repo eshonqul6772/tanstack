@@ -32,7 +32,7 @@ const HttpInitializer = () => {
 
         http.init({
             config: {
-                baseURL: import.meta.env.VITE_API_URL,
+                baseURL: 'https://hudud.adliya.uz/api/v1',
                 timeout: 15000,
             },
 

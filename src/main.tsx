@@ -1,10 +1,4 @@
-import {createRoot} from "react-dom/client";
-
-// Mantine CSS imports (must be imported before any Mantine components)
-import '@mantine/core/styles.css';
-import '@mantine/notifications/styles.css';
-import '@mantine/modals/styles.css';
-import '@mantine/dates/styles.css';
+import { createRoot } from "react-dom/client";
 
 import * as Providers from "@/providers";
 
@@ -14,7 +8,7 @@ createRoot(document.getElementById("root")!).render(
     <Providers.QueryProvider>
         <Providers.MantineProvider>
             <AuthContainer.AuthProvider>
-                <Providers.RouterProvider/>
+                <Providers.RouterProvider />
             </AuthContainer.AuthProvider>
         </Providers.MantineProvider>
     </Providers.QueryProvider>

@@ -1,7 +1,7 @@
-import React, {useEffect, useReducer} from 'react';
-import {useQuery} from '@tanstack/react-query';
+import React, { useEffect, useReducer } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
-import {storage} from '@/services';
+import { storage } from '@/services';
 import * as Api from '@/modules/auth/api';
 import * as Types from '@/modules/auth/types';
 import * as Actions from '@/modules/auth/actions';
@@ -9,20 +9,22 @@ import * as Mappers from '@/modules/auth/mappers';
 import * as Constants from '@/modules/auth/constants';
 
 import { AuthProviderComp } from '@/providers/AuthProvider';
-import {authReducer, initialState} from '@/modules/auth/reducer';
+import { authReducer, initialState } from '@/modules/auth/reducer';
 
-const AuthProvider: React.FC<{ children: React.ReactNode }> = ({children}) => {
+const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    const token = storage.local.get('auth_token');
     const [state, dispatch] = useReducer(authReducer, {
         ...initialState,
-        token: storage.local.get('auth_token'),
+        token: token,
+        isFetched: !token,
     });
 
-    const {data, error} = useQuery<Types.IQuery.Profile>({
+    const { data, error } = useQuery<Types.IQuery.Profile>({
         queryKey: [Constants.ENTITY, 'profile', state.token],
         queryFn: async () => {
             dispatch(Actions.Profile.request());
 
-            const {data} = await Api.Profile();
+            const { data } = await Api.Profile();
             return Mappers.getProfile(data?.data);
         },
         enabled: !!state.token,
@@ -31,7 +33,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({children}) => {
 
     useEffect(() => {
         if (data) {
-            dispatch(Actions.Profile.success({profile: data}));
+            dispatch(Actions.Profile.success({ profile: data }));
         }
 
         if (error) {
@@ -40,7 +42,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({children}) => {
     }, [data, error, dispatch]);
 
     return (
-        <AuthProviderComp value={{state, dispatch}}>
+        <AuthProviderComp value={{ state, dispatch }}>
             {children}
         </AuthProviderComp>
     );

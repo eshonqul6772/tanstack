@@ -29,6 +29,7 @@ export const authReducer = (
 ): Types.IState => {
     switch (action.type) {
         case Constants.LOGIN.SUCCESS: {
+            console.log('action',action)
             const {token} = action.payload;
 
             return {

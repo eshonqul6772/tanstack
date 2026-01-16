@@ -9,13 +9,12 @@ export const Login = ({
 }: {
   values: Types.IForm.Login;
 }): AxiosPromise<Types.IApi.Login.Response> =>
-  http.request.post('/auth/login', {
-    username: values.username.trim(),
-    password: values.password.trim(),
-    remember_me: false,
+  http.post('/auth/login', {
+    username: values.username,
+    password: values.password,
   });
 
-export const Logout = () => http.request.post('/auth/logout');
+export const Logout = () => http.post('/auth/logout');
 
 export const Profile = (): AxiosPromise<Types.IApi.Profile.Response> =>
-  http.request.get('/auth/me');
+  http.get('/auth/me');

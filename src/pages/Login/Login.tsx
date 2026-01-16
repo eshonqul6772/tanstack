@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Button,Loader  } from '@mantine/core';
+import {Grid, Button, Loader} from '@mantine/core';
 
 import {useAuth} from '@/providers/AuthProvider';
 
@@ -24,24 +24,24 @@ const Login: React.FC = () => {
                 >
                     {form => (
                         <>
-                            {form.submitting && <Loader color="blue" />}
+                            {form.submitting && <Loader color="blue"/>}
 
-                            <Grid  gutter={{ base: 5, xs: 'md', md: 'xl', xl: 50 }}>
+                            <Grid gutter={{base: 5, xs: 'md', md: 'xl', xl: 50}}>
                                 <Grid.Col span={12}>
-                                        <Fields.Text
-                                            name="username"
-                                            form={form}
-                                            validation={{required: true}}
-                                        />
+                                    <Fields.Text
+                                        name="username"
+                                        form={form}
+                                        validation={{required: true}}
+                                    />
                                 </Grid.Col>
 
                                 <Grid.Col span={12}>
-                                        <Fields.Text
-                                            name="password"
-                                            type={'password'}
-                                            validation={{required: true}}
-                                            form={form}
-                                        />
+                                    <Fields.Text
+                                        name="password"
+                                        type={'password'}
+                                        validation={{required: true}}
+                                        form={form}
+                                    />
                                 </Grid.Col>
 
                                 <Grid.Col span={12}>
