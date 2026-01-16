@@ -1,5 +1,6 @@
 import React from 'react';
 import {Grid, Button, Loader} from '@mantine/core';
+import {useTranslation} from 'react-i18next'
 
 import {useAuth} from '@/providers/AuthProvider';
 
@@ -10,6 +11,8 @@ import * as Fields from '@/containers/Fields';
 import cls from './Login.module.scss';
 
 const Login: React.FC = () => {
+    const {t} = useTranslation();
+
     const {dispatch} = useAuth();
 
     return (
@@ -52,7 +55,7 @@ const Login: React.FC = () => {
                                         variant="solid"
                                         size="large"
                                     >
-                                        'action_login
+                                        {t('action_login')}
                                     </Button>
                                 </Grid.Col>
                             </Grid>
