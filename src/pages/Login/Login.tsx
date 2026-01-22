@@ -1,8 +1,9 @@
 import React from 'react';
-import {Grid, Button, Loader} from '@mantine/core';
-import {useTranslation} from 'react-i18next'
+import { Grid, Button, Loader } from '@mantine/core';
+import { useTranslation } from 'react-i18next'
 
-import {useAuth} from '@/providers/AuthProvider';
+import { useAuth } from '@/providers/AuthProvider';
+import { storage } from '@/services';
 
 import * as Forms from '@/modules/auth/forms';
 import * as Actions from '@/modules/auth/actions';
@@ -11,9 +12,9 @@ import * as Fields from '@/containers/Fields';
 import cls from './Login.module.scss';
 
 const Login: React.FC = () => {
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
-    const {dispatch} = useAuth();
+    const { dispatch } = useAuth();
 
     return (
         <div className={cls.wrapper}>
@@ -22,19 +23,21 @@ const Login: React.FC = () => {
 
                 <Forms.Login
                     onSuccess={token => {
-                        dispatch(Actions.Login.success({token}));
+                        // Token'ni storage'ga saqlash
+                        storage.local.set('auth_token', token.accessToken);
+                        dispatch(Actions.Login.success({ token }));
                     }}
                 >
                     {form => (
                         <>
-                            {form.submitting && <Loader color="blue"/>}
+                            {form.submitting && <Loader color="blue" />}
 
-                            <Grid gutter={{base: 5, xs: 'md', md: 'xl', xl: 50}}>
+                            <Grid gutter={{ base: 5, xs: 'md', md: 'xl', xl: 50 }}>
                                 <Grid.Col span={12}>
                                     <Fields.Text
                                         name="username"
                                         form={form}
-                                        validation={{required: true}}
+                                        validation={{ required: true }}
                                     />
                                 </Grid.Col>
 
@@ -42,7 +45,7 @@ const Login: React.FC = () => {
                                     <Fields.Text
                                         name="password"
                                         type={'password'}
-                                        validation={{required: true}}
+                                        validation={{ required: true }}
                                         form={form}
                                     />
                                 </Grid.Col>

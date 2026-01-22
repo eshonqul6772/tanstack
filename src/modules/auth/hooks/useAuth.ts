@@ -1,10 +1,11 @@
-import {useAuth as useAuthOriginal} from '@/providers/AuthProvider';
-import * as Constants from '../constants'
+import { useAuth as useAuthOriginal } from '@/providers/AuthProvider';
+import * as Api from '../api';
+import * as Actions from '../actions';
 
 let globalAuthStore: any = null;
 
 export const useAuth = () => {
-    const {state, dispatch} = useAuthOriginal();
+    const { state, dispatch } = useAuthOriginal();
 
     const authObj = {
         isAuthenticated: state.isAuthenticated,
@@ -15,7 +16,19 @@ export const useAuth = () => {
         dispatch,
 
         methods: {
-            logout: () => dispatch({type: Constants.LOGOUT.REQUEST}),
+            logout: async () => {
+                dispatch(Actions.Logout.request());
+                try {
+                    // API'ga logout so'rovi yuborish
+                    if (state.token) {
+                        await Api.Logout();
+                    }
+                } catch (error) {
+                    // Xato bo'lsa ham logout qilish
+                } finally {
+                    dispatch(Actions.Logout.success());
+                }
+            },
         },
     };
 
@@ -24,4 +37,4 @@ export const useAuth = () => {
     return authObj;
 };
 
-export const getAuthStore = () => globalAuthStore;
+export const getAuthStore = () => globalAuthStore;  

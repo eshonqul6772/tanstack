@@ -1,8 +1,8 @@
 import React from 'react';
 
-import {PERMISSIONS} from '@/utils/enums';
+import { PERMISSIONS } from '@/utils/enums';
 
-import * as Hooks from '@/modules/auth/hooks';
+import * as Hooks from '@/modules/auth/hooks/useAuth';
 
 import NoAccess from '@/pages/NoAccess';
 
@@ -11,12 +11,14 @@ interface IProps {
     page: React.ReactNode;
 }
 
-const CheckPermission: React.FC<IProps> = ({permission, page}) => {
-    const {profile} = Hooks.useAuth();
+const CheckPermission: React.FC<IProps> = ({ permission, page }) => {
+    const { profile } = Hooks.useAuth();
 
-    if (profile.permissions.includes(permission)) return page;
+    if (!profile || !profile.permissions?.includes(permission)) {
+        return <NoAccess />;
+    }
 
-    return <NoAccess/>;
+    return <>{page}</>;
 };
 
 export default CheckPermission;

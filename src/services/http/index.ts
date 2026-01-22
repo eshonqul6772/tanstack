@@ -90,6 +90,24 @@ class Http {
         // Request interceptor
         this.instance.interceptors.request.use(
             async (config) => {
+                // Ensure headers object exists
+                if (!config.headers) {
+                    config.headers = {};
+                }
+
+                // Add token from authStore to every request
+                try {
+                    const store = getAuthStore();
+                    const token = store?.state?.token;
+
+                    if (token) {
+                        config.headers.Authorization = `Bearer ${token}`;
+                    }
+                } catch (error) {
+                    // Auth store not initialized yet, continue without token
+                }
+
+                // Apply custom config function if provided
                 if (configFn) {
                     const modifiedConfig = await configFn(config);
                     return { ...config, ...modifiedConfig };

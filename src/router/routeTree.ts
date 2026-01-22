@@ -1,4 +1,4 @@
-import React, {lazy} from "react";
+import React, { lazy } from "react";
 import {
     createRoute,
     createRootRouteWithContext,
@@ -11,7 +11,7 @@ import MainLayout from '@/layouts';
 import Loading from '@/components/Loading';
 import ErrorComponent from '@/components/ErrorComponent';
 
-import {allRoutes} from './routes';
+import { allRoutes } from './routes';
 
 interface RouterContext {
     auth: {
@@ -42,17 +42,20 @@ const indexRoute = createRoute({
     getParentRoute: () => rootRoute,
     path: '/',
     component: IndexComponent,
-    beforeLoad: ({context}: {context: RouterContext}) => {
+    beforeLoad: ({ context }: { context: RouterContext }) => {
+        // Agar auth hali fetch qilinmagan bo'lsa, kuting
         if (!context.auth.isFetched) {
             return;
         }
-        
-        if (context.auth.token && context.auth.isAuthenticated) {
+
+        // Agar authenticated bo'lsa, dashboard'ga yo'naltir
+        if (context.auth.isAuthenticated) {
             throw redirect({
                 to: '/dashboard',
             });
         }
-        
+
+        // Aks holda login sahifasiga yo'naltir
         throw redirect({
             to: '/login',
         });
@@ -61,7 +64,7 @@ const indexRoute = createRoute({
 
 const createAppRoute = (config: typeof allRoutes[number]): Route<any> => {
     const LazyComponent = lazy(() =>
-        config.component().then(m => ({default: m.default}))
+        config.component().then(m => ({ default: m.default }))
     );
 
     const parentRoute = config.metadata.requiresAuth ? layoutRoute : rootRoute;
@@ -72,16 +75,31 @@ const createAppRoute = (config: typeof allRoutes[number]): Route<any> => {
         component: LazyComponent,
     };
 
-    routeConfig.beforeLoad = ({context, location}: {
+    routeConfig.beforeLoad = ({ context, location }: {
         context: RouterContext;
         location: Location;
     }) => {
         if (config.key === 'login') {
+            // Agar token bo'lsa va auth hali fetch qilinmagan bo'lsa, 
+            // bu profile fetch qilinayotganini anglatadi, shuning uchun kuting
+            if (context.auth.token && !context.auth.isFetched) {
+                return;
+            }
+
+            // Agar authenticated bo'lsa, dashboard'ga redirect (login sahifasini ochmaslik)
             if (context.auth.isAuthenticated) {
                 throw redirect({
                     to: '/dashboard',
                 });
             }
+
+            // Agar token bo'lsa lekin hali authenticated bo'lmagan bo'lsa, 
+            // bu profile fetch qilinayotganini anglatadi, kuting
+            if (context.auth.token) {
+                return;
+            }
+
+            // Aks holda login sahifasini ko'rsatishga ruxsat ber
             return;
         }
 
@@ -89,7 +107,7 @@ const createAppRoute = (config: typeof allRoutes[number]): Route<any> => {
             if (!context.auth.isFetched) {
                 return;
             }
-            
+
             if (!context.auth.isAuthenticated) {
                 throw redirect({
                     to: '/login',
@@ -119,4 +137,4 @@ export const routeMap = Object.fromEntries(
     allRoutes.map((config, index) => [config.key, appRoutes[index]])
 );
 
-export {rootRoute};
+export { rootRoute };

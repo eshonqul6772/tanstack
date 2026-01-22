@@ -1,5 +1,7 @@
-import {getFile, getIdAndName} from '@/utils/mappers';
-import {ActionType} from 'typesafe-actions'
+import { getFile, getIdAndName } from '@/utils/mappers';
+import { ActionType } from 'typesafe-actions'
+
+import { storage } from '@/services';
 
 import * as Types from './types';
 import * as Actions from './actions';
@@ -29,8 +31,8 @@ export const authReducer = (
 ): Types.IState => {
     switch (action.type) {
         case Constants.LOGIN.SUCCESS: {
-            console.log('action',action)
-            const {token} = action.payload;
+            console.log('action', action)
+            const { token } = action.payload;
 
             return {
                 ...state,
@@ -61,7 +63,18 @@ export const authReducer = (
                 isFetched: false,
             };
 
+        case Constants.LOGOUT.REQUEST:
+            // Token'ni storage'dan o'chirish
+            storage.local.remove('auth_token');
+            return {
+                ...state,
+                isAuthenticated: false,
+                isFetched: false,
+            };
+
         case Constants.LOGOUT.SUCCESS:
+            // Token'ni storage'dan o'chirish (agar hali o'chirilmagan bo'lsa)
+            storage.local.remove('auth_token');
             return {
                 ...initialState,
                 token: '',
