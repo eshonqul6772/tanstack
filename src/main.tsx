@@ -1,10 +1,11 @@
-import { createRoot } from "react-dom/client";
+import { createRoot } from 'react-dom/client'
 
-import * as Providers from "@/providers";
+import * as Providers from '@/providers'
+import * as AuthContainer from '@/modules/auth/containers'
 
-import * as AuthContainer from "@/modules/auth/containers";
-
-createRoot(document.getElementById("root")!).render(
+createRoot(
+    document.getElementById('root')!
+).render(
     <Providers.QueryProvider>
         <Providers.MantineProvider>
             <AuthContainer.AuthProvider>
@@ -12,4 +13,4 @@ createRoot(document.getElementById("root")!).render(
             </AuthContainer.AuthProvider>
         </Providers.MantineProvider>
     </Providers.QueryProvider>
-);
+)

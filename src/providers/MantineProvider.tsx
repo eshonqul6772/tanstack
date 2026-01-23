@@ -1,4 +1,3 @@
-// providers/MantineProvider.tsx (to'liq versiya)
 import React from 'react';
 import { MantineProvider as MantineCoreProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';

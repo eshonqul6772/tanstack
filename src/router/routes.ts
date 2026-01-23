@@ -26,8 +26,8 @@ export const allRoutes = [
             requiresAuth: false,
         },
     },
-] as const;
+] as const
 
-export type RouteKey = typeof allRoutes[number]['key'];
-export type RoutePath = typeof allRoutes[number]['path'];
-export type RouteMetadata = typeof allRoutes[number]['metadata'];
+export type RouteKey = (typeof allRoutes)[number]['key']
+export type RoutePath = (typeof allRoutes)[number]['path']
+export type RouteMetadata = (typeof allRoutes)[number]['metadata']
