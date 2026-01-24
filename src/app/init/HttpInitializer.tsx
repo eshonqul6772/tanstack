@@ -34,10 +34,7 @@ const HttpInitializer = () => {
     });
 
     http.init({
-      config: {
-        baseURL: 'https://hudud.adliya.uz/api/v1',
-        timeout: 15000
-      }
+      baseURL: 'https://hudud.adliya.uz/api/v1'
     });
   }, [auth]);
 

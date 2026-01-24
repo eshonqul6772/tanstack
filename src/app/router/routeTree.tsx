@@ -9,6 +9,7 @@ import { allRoutes } from './routes';
 interface RouterContext {
   auth: {
     isAuthenticated: boolean;
+    isFetched: boolean;
     token: string;
     logout: () => void;
   };
@@ -57,6 +58,11 @@ const createAppRoute = (config: (typeof allRoutes)[number]): Route<any> => {
   };
 
   routeConfig.beforeLoad = ({ context, location }: { context: RouterContext; location: Location }) => {
+    // ⏳ WAITING FOR AUTH CHECK
+    if (!context.auth.isFetched) {
+      return; // Don't redirect, wait for profile to load
+    }
+
     // 🔓 LOGIN ROUTE
     if (config.key === 'login') {
       if (context.auth.isAuthenticated) {

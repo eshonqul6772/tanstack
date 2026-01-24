@@ -18,6 +18,15 @@ export const allRoutes = [
     }
   },
   {
+    key: 'project',
+    path: '/project',
+    component: () => import('@/pages/NotFound'),
+    metadata: {
+      title: 'Project',
+      requiresAuth: true
+    }
+  },
+  {
     key: 'notfound',
     path: '*',
     component: () => import('@/pages/NotFound'),

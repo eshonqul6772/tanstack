@@ -29,11 +29,12 @@ const RouterProvider = () => {
     () => ({
       auth: {
         isAuthenticated: auth.isAuthenticated,
+        isFetched: auth.isFetched,
         token: auth.token || '',
         logout: () => auth.methods.logout()
       }
     }),
-    [auth.isAuthenticated, auth.token]
+    [auth.isAuthenticated, auth.isFetched, auth.token]
   );
 
   React.useEffect(() => {
