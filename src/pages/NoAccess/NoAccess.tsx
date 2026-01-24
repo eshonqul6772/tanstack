@@ -1,11 +1,11 @@
 import {Button} from '@mantine/core';
 import {useTranslation} from 'react-i18next';
 
-import NoAccessSvg from '@/assets/images/no-access.svg';
+import NoAccessSvg from '@/shared/assets/images/no-access.svg';
 
 import classes from './NoAccess.module.scss';
 
-import {useAuth} from '@/modules/auth/hooks';
+import { useAuth } from '@/features/auth/hooks';
 
 const NoAccess = () => {
     const {t} = useTranslation();

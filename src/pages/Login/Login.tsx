@@ -2,12 +2,12 @@ import React from 'react';
 import { Grid, Button, Loader } from '@mantine/core';
 import { useTranslation } from 'react-i18next'
 
-import { useAuth } from '@/providers/AuthProvider';
-import { storage } from '@/services';
+import { useAuth } from '@/features/auth/model/AuthContext';
+import storage from '@/shared/lib/storage';
 
-import * as Forms from '@/modules/auth/forms';
-import * as Actions from '@/modules/auth/actions';
-import * as Fields from '@/containers/Fields';
+import * as Forms from '@/features/auth/ui';
+import * as Actions from '@/features/auth/model/actions';
+import * as Fields from '@/shared/ui/fields';
 
 import cls from './Login.module.scss';
 
