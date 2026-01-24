@@ -1,4 +1,4 @@
-import { TSortItem } from './interfaces';
+import type { TSortItem } from './interfaces';
 
 export function sort(a: TSortItem, b: TSortItem): number {
   if (a > b) return 1;

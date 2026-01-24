@@ -1,207 +1,168 @@
 import axios, {
-    AxiosError,
-    AxiosHeaders,
-    AxiosInstance,
-    AxiosRequestConfig,
-    AxiosResponse,
-    InternalAxiosRequestConfig,
+  type AxiosError,
+  AxiosHeaders,
+  type AxiosInstance,
+  type AxiosRequestConfig,
+  type AxiosResponse,
+  type InternalAxiosRequestConfig
 } from 'axios';
 
 import { MESSAGE_TYPE } from '@/shared/lib/utils/enums';
 
-// ================= TYPES =================
-
 type AuthHandlers = {
-    getToken: () => string | undefined;
-    onLogout: () => void;
+  getToken: () => string | undefined;
+  onLogout: () => void;
 };
 
 type InitOptions = {
-    config?: AxiosRequestConfig;
-    configFn?: (
-        config: InternalAxiosRequestConfig
-    ) => InternalAxiosRequestConfig | Promise<InternalAxiosRequestConfig>;
+  config?: AxiosRequestConfig;
+  configFn?: (config: InternalAxiosRequestConfig) => InternalAxiosRequestConfig | Promise<InternalAxiosRequestConfig>;
 };
 
 type NotificationPayload = {
-    code?: string;
-    type?: string;
+  code?: string;
+  type?: string;
 };
-
-// ================= CONFIG =================
 
 const defaultConfig: AxiosRequestConfig = {
-    headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json; charset=utf-8',
-    },
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json; charset=utf-8'
+  }
 };
-
-// ================= STORE MANAGEMENT =================
 
 let authHandlers: AuthHandlers | null = null;
 
 export const setAuthHandlers = (handlers: AuthHandlers): void => {
-    authHandlers = handlers;
+  authHandlers = handlers;
 };
 
 const getAuthHandlers = (): AuthHandlers | null => authHandlers;
 
-// ================= HTTP SERVICE =================
-
 class Http {
-    private instance: AxiosInstance | null = null;
-    private configFn: InitOptions['configFn'] | null = null;
+  private instance: AxiosInstance | null = null;
+  private configFn: InitOptions['configFn'] | null = null;
 
-    // ================= INITIALIZATION =================
-
-    public init(options: InitOptions = {}): AxiosInstance {
-        if (this.instance) {
-            if (options.configFn) {
-                this.configFn = options.configFn;
-            }
-            return this.instance;
-        }
-
-        this.configFn = options.configFn ?? null;
-        this.instance = axios.create({
-            ...defaultConfig,
-            ...options.config,
-        });
-
-        this.setupInterceptors();
-
-        return this.instance;
+  public init(options: InitOptions = {}): AxiosInstance {
+    if (this.instance) {
+      if (options.configFn) {
+        this.configFn = options.configFn;
+      }
+      return this.instance;
     }
 
-    // ================= INTERCEPTORS =================
+    this.configFn = options.configFn ?? null;
+    this.instance = axios.create({
+      ...defaultConfig,
+      ...options.config
+    });
 
-    private setupInterceptors(): void {
-        if (!this.instance) return;
+    this.setupInterceptors();
 
-        this.instance.interceptors.request.use(
-            this.handleRequest,
-            (error) => Promise.reject(error)
-        );
+    return this.instance;
+  }
 
-        this.instance.interceptors.response.use(
-            (response) => response,
-            (error) => this.handleResponseError(error)
-        );
+  private setupInterceptors(): void {
+    if (!this.instance) return;
+
+    this.instance.interceptors.request.use(this.handleRequest, error => Promise.reject(error));
+
+    this.instance.interceptors.response.use(
+      response => response,
+      error => this.handleResponseError(error)
+    );
+  }
+
+  private handleRequest = async (config: InternalAxiosRequestConfig): Promise<InternalAxiosRequestConfig> => {
+    const baseHeaders = AxiosHeaders.from(config.headers);
+    config.headers = baseHeaders;
+
+    const handlers = getAuthHandlers();
+    const token = handlers?.getToken?.();
+
+    if (token) {
+      baseHeaders.set('Authorization', `Bearer ${token}`);
     }
 
-    private handleRequest = async (
-        config: InternalAxiosRequestConfig
-    ): Promise<InternalAxiosRequestConfig> => {
-        const baseHeaders = AxiosHeaders.from(config.headers);
-        config.headers = baseHeaders;
+    if (this.configFn) {
+      const modifiedConfig = await this.configFn(config);
+      const mergedHeaders = modifiedConfig.headers
+        ? AxiosHeaders.from({
+            ...baseHeaders.toJSON(),
+            ...AxiosHeaders.from(modifiedConfig.headers).toJSON()
+          })
+        : baseHeaders;
 
-        const handlers = getAuthHandlers();
-        const token = handlers?.getToken?.();
+      return { ...config, ...modifiedConfig, headers: mergedHeaders };
+    }
 
-        if (token) {
-            baseHeaders.set('Authorization', `Bearer ${token}`);
-        }
+    return config;
+  };
 
-        if (this.configFn) {
-            const modifiedConfig = await this.configFn(config);
-            const mergedHeaders = modifiedConfig.headers
-                ? AxiosHeaders.from({
-                      ...baseHeaders.toJSON(),
-                      ...AxiosHeaders.from(modifiedConfig.headers).toJSON(),
-                  })
-                : baseHeaders;
+  private async handleResponseError(error: AxiosError): Promise<never> {
+    const response = error.response;
 
-            return { ...config, ...modifiedConfig, headers: mergedHeaders };
-        }
+    if (response?.data) {
+      this.showNotification(response.data);
+    }
 
-        return config;
+    if (response?.status === 401) {
+      this.handleUnauthorized();
+    }
+
+    return Promise.reject(error);
+  }
+
+  private handleUnauthorized(): void {
+    const handlers = getAuthHandlers();
+    handlers?.onLogout?.();
+  }
+
+  private showNotification(data: unknown): void {
+    if (!data || typeof data !== 'object') return;
+
+    const { code, type } = data as NotificationPayload;
+
+    if (!code || !type) return;
+
+    const notificationMap: Record<string, (message: string) => void> = {
+      [MESSAGE_TYPE.INFO]: console.info,
+      [MESSAGE_TYPE.WARNING]: console.warn,
+      [MESSAGE_TYPE.ERROR]: console.error
     };
 
-    private async handleResponseError(error: AxiosError): Promise<never> {
-        const response = error.response;
-
-        if (response?.data) {
-            this.showNotification(response.data);
-        }
-
-        if (response?.status === 401) {
-            this.handleUnauthorized();
-        }
-
-        return Promise.reject(error);
+    const notifyFn = notificationMap[type];
+    if (notifyFn) {
+      notifyFn(code);
     }
+  }
 
-    // ================= AUTH =================
-
-    private handleUnauthorized(): void {
-        const handlers = getAuthHandlers();
-        handlers?.onLogout?.();
+  public request<T = any>(config: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+    if (!this.instance) {
+      throw new Error('Http is not initialized. Call init() first.');
     }
+    return this.instance.request<T>(config);
+  }
 
-    // ================= NOTIFICATIONS =================
+  public get<T = any>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+    return this.request<T>({ ...config, method: 'GET', url });
+  }
 
-    private showNotification(data: unknown): void {
-        if (!data || typeof data !== 'object') return;
+  public post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+    return this.request<T>({ ...config, method: 'POST', url, data });
+  }
 
-        const { code, type } = data as NotificationPayload;
+  public put<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+    return this.request<T>({ ...config, method: 'PUT', url, data });
+  }
 
-        if (!code || !type) return;
+  public patch<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+    return this.request<T>({ ...config, method: 'PATCH', url, data });
+  }
 
-        const notificationMap: Record<string, (message: string) => void> = {
-            [MESSAGE_TYPE.INFO]: console.info,
-            [MESSAGE_TYPE.WARNING]: console.warn,
-            [MESSAGE_TYPE.ERROR]: console.error,
-        };
-
-        const notifyFn = notificationMap[type];
-        if (notifyFn) {
-            notifyFn(code);
-        }
-    }
-
-    // ================= PUBLIC API =================
-
-    public request<T = any>(config: AxiosRequestConfig): Promise<AxiosResponse<T>> {
-        if (!this.instance) {
-            throw new Error('Http is not initialized. Call init() first.');
-        }
-        return this.instance.request<T>(config);
-    }
-
-    public get<T = any>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
-        return this.request<T>({ ...config, method: 'GET', url });
-    }
-
-    public post<T = any>(
-        url: string,
-        data?: any,
-        config?: AxiosRequestConfig
-    ): Promise<AxiosResponse<T>> {
-        return this.request<T>({ ...config, method: 'POST', url, data });
-    }
-
-    public put<T = any>(
-        url: string,
-        data?: any,
-        config?: AxiosRequestConfig
-    ): Promise<AxiosResponse<T>> {
-        return this.request<T>({ ...config, method: 'PUT', url, data });
-    }
-
-    public patch<T = any>(
-        url: string,
-        data?: any,
-        config?: AxiosRequestConfig
-    ): Promise<AxiosResponse<T>> {
-        return this.request<T>({ ...config, method: 'PATCH', url, data });
-    }
-
-    public delete<T = any>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
-        return this.request<T>({ ...config, method: 'DELETE', url });
-    }
+  public delete<T = any>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+    return this.request<T>({ ...config, method: 'DELETE', url });
+  }
 }
-
-// ================= EXPORT =================
 
 export default new Http();

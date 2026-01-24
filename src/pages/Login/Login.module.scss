@@ -1,32 +1,109 @@
 .wrapper {
-  display: grid;
-  place-items: center;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
+  background-color: #f5f5f5;
 }
 
-.content {
-  width: 400px;
-  padding: 64px 32px;
-  text-align: center;
-  background-color: var(--color-white);
-  border-radius: var(--radius-xl);
-  box-shadow: 0 10px 15px 0 #050d1d2e;
+@keyframes slideIn {
+  from {
+    transform: translateX(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+}
+
+.contentWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 0 40px;
+}
+
+.formCard {
+  width: 100%;
+  max-width: 520px;
+  box-shadow: 0 20px 60px rgba(5, 13, 29, 0.18);
+  background-color: #ffffff;
+  animation: fadeUp 0.6s ease-out;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.logoContainer {
+  display: flex;
+  justify-content: flex-start;
 }
 
 .logo {
-  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background-color: #f0f7ff;
+  border-radius: 12px;
+  animation: scaleIn 0.5s ease-out 0.2s both;
 }
 
-.title {
-  margin-bottom: 8px;
-  color: var(--color-dark-1000);
-  font-weight: 600;
-  font-size: 24px;
+@keyframes scaleIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
-.description {
-  margin-bottom: 16px;
-  color: var(--color-dark-900);
+.signInBtn {
+  height: 44px;
   font-size: 16px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: #1560a8 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(25, 113, 194, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.loaderContainer {
+  display: flex;
+  justify-content: center;
+  padding: 12px 0;
 }

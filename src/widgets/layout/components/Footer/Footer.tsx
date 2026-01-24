@@ -1,13 +1,25 @@
-import React from "react";
+import type React from 'react';
 
 const Footer: React.FunctionComponent = () => {
-    return (
-        <footer className="bg-white border-t">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-                <p className="text-center text-gray-500">© 2024 My App. All rights reserved.</p>
-            </div>
-        </footer>
-    )
-}
+  return (
+    <footer className="bg-white border-t border-gray-200 py-4">
+      <div className="px-6">
+        <div className="flex justify-between items-center text-sm text-gray-500">
+          <p>
+            Copyright © 2026 <span className="font-semibold">Ecme</span> All rights reserved.
+          </p>
+          <div className="flex gap-6">
+            <a href="#" className="hover:text-gray-700 transition">
+              Term & Conditions
+            </a>
+            <a href="#" className="hover:text-gray-700 transition">
+              Privacy & Policy
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+};
 
-export default Footer
+export default Footer;

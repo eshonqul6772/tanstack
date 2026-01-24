@@ -1,12 +1,11 @@
-import React from "react";
+import type React from 'react';
 
-const ErrorComponent:React.FC = ()=>{
-    return (
-        <div className="flex justify-center items-center h-screen">
-            <div className="text-red-500 text-xl">Xatolik yuz berdi</div>
-        </div>
-    )
-}
+const ErrorComponent: React.FC = () => {
+  return (
+    <div className="flex justify-center items-center h-screen">
+      <div className="text-red-500 text-xl">Xatolik yuz berdi</div>
+    </div>
+  );
+};
 
-
-export default ErrorComponent
+export default ErrorComponent;

@@ -1,7 +1,7 @@
-import { IMultiName } from '@/shared/lib/utils/interfaces';
+import type { IMultiName } from '@/shared/lib/utils/interfaces';
 
 export const MultiNameObject: IMultiName = {
   uz: '',
   ru: '',
-  en: '',
+  en: ''
 };

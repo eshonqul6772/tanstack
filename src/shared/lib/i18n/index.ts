@@ -13,14 +13,7 @@ interface IProps {
   onChange: (language: string) => void;
 }
 
-export const init = ({
-  languages,
-  currentLanguage,
-  initialLanguage,
-  backend,
-  debug,
-  onChange,
-}: IProps) => {
+export const init = ({ languages, currentLanguage, initialLanguage, backend, debug, onChange }: IProps) => {
   i18n.on('languageChanged', language => {
     onChange(language);
   });
@@ -37,19 +30,19 @@ export const init = ({
       debug,
       supportedLngs: languages,
       interpolation: {
-        escapeValue: false,
+        escapeValue: false
       },
       ns: ['common'],
       defaultNS: 'common',
       backend: {
         loadPath: backend?.loadPath,
         crossDomain: true,
-        allowMultiLoading: true,
+        allowMultiLoading: true
       },
       react: {
         // useSuspense: true,
         // wait: true,
-      },
+      }
     })
     .then();
 };

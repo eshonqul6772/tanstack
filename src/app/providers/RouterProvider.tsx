@@ -1,57 +1,52 @@
-import React from 'react'
-import {
-    RouterProvider as TanstackRouterProvider,
-    createRouter,
-} from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
+import { createRouter, RouterProvider as TanstackRouterProvider } from '@tanstack/react-router';
+import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
+import React from 'react';
 
-import HttpInitializer from '@/app/init/HttpInitializer'
-import { useAuth } from '@/features/auth/hooks/useAuth'
-import config from '@/shared/config'
-import { routeTree } from '@/app/router/routeTree'
+import HttpInitializer from '@/app/init/HttpInitializer';
+import { routeTree } from '@/app/router/routeTree';
+import { useAuth } from '@/features/auth/hooks/useAuth';
+import config from '@/shared/config';
 
 const router = createRouter({
-    routeTree,
-    defaultPreload: 'intent',
-    defaultStaleTime: 1000 * 60 * 5,
-    context: {
-        auth: undefined!,
-    },
-})
+  routeTree,
+  defaultPreload: 'intent',
+  defaultStaleTime: 1000 * 60 * 5,
+  context: {
+    auth: undefined!
+  }
+});
 
 declare module '@tanstack/react-router' {
-    interface Register {
-        router: typeof router
-    }
+  interface Register {
+    router: typeof router;
+  }
 }
 
 const RouterProvider = () => {
-    const auth = useAuth()
+  const auth = useAuth();
 
-    const routerContext = React.useMemo(
-        () => ({
-            auth: {
-                isAuthenticated: auth.isAuthenticated,
-                token: auth.token || '',
-                logout: () => auth.methods.logout(),
-            },
-        }),
-        [auth.isAuthenticated, auth.token]
-    )
+  const routerContext = React.useMemo(
+    () => ({
+      auth: {
+        isAuthenticated: auth.isAuthenticated,
+        token: auth.token || '',
+        logout: () => auth.methods.logout()
+      }
+    }),
+    [auth.isAuthenticated, auth.token]
+  );
 
-    React.useEffect(() => {
-        router.invalidate().then(r => r)
-    }, [auth.isAuthenticated])
+  React.useEffect(() => {
+    router.invalidate().then(r => r);
+  }, [auth.isAuthenticated]);
 
-    return (
-        <>
-            <HttpInitializer />
-            <TanstackRouterProvider router={router} context={routerContext} />
-            {config.app.isDev && (
-                <TanStackRouterDevtools router={router} initialIsOpen={false} />
-            )}
-        </>
-    )
-}
+  return (
+    <>
+      <HttpInitializer />
+      <TanstackRouterProvider router={router} context={routerContext} />
+      {config.app.isDev && <TanStackRouterDevtools router={router} initialIsOpen={false} />}
+    </>
+  );
+};
 
-export default RouterProvider
+export default RouterProvider;

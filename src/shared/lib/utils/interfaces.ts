@@ -1,4 +1,4 @@
-import { STATUS } from '@/shared/lib/utils/enums';
+import type { STATUS } from '@/shared/lib/utils/enums';
 
 export interface IParams {
   page?: number;
@@ -18,15 +18,7 @@ export interface IFilter {
   key: string;
   operation: '>' | '>=' | '<' | '<=' | '=' | '!=' | '%_%' | '%_' | '_%' | 'in';
   value: number | string | boolean | null | undefined | string[] | number[];
-  type:
-    | 'NUMBER'
-    | 'STRING'
-    | 'BOOLEAN'
-    | 'JSON'
-    | 'DATE'
-    | 'LOCAL_DATE'
-    | 'LOCAL_DATE_TIME'
-    | 'ENUM_COLLECTION';
+  type: 'NUMBER' | 'STRING' | 'BOOLEAN' | 'JSON' | 'DATE' | 'LOCAL_DATE' | 'LOCAL_DATE_TIME' | 'ENUM_COLLECTION';
 }
 
 export interface IMeta {
