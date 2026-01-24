@@ -1,3 +1,5 @@
+import type { PERMISSIONS } from '@/shared/lib/utils/enums';
+
 export const allRoutes = [
   {
     key: 'login',
@@ -5,7 +7,8 @@ export const allRoutes = [
     component: () => import('@/pages/Login'),
     metadata: {
       title: 'Login',
-      requiresAuth: false
+      requiresAuth: false,
+      requiredPermissions: [] as PERMISSIONS[]
     }
   },
   {
@@ -14,16 +17,8 @@ export const allRoutes = [
     component: () => import('@/pages/Dashboard'),
     metadata: {
       title: 'Dashboard',
-      requiresAuth: true
-    }
-  },
-  {
-    key: 'project',
-    path: '/project',
-    component: () => import('@/pages/NotFound'),
-    metadata: {
-      title: 'Project',
-      requiresAuth: true
+      requiresAuth: true,
+      requiredPermissions: [] as PERMISSIONS[]
     }
   },
   {
@@ -32,7 +27,8 @@ export const allRoutes = [
     component: () => import('@/pages/NotFound'),
     metadata: {
       title: 'Page Not Found',
-      requiresAuth: true
+      requiresAuth: true,
+      requiredPermissions: [] as PERMISSIONS[]
     }
   }
 ] as const;

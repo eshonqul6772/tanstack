@@ -13,6 +13,7 @@ import {
 import { IconChevronDown } from '@tabler/icons-react';
 import type React from 'react';
 import { useState } from 'react';
+import { useAuth } from '@/features/auth/hooks/useAuth';
 import { DEFAULT_EXPANDED_SECTIONS, MENU_SECTIONS, type MenuItem } from './menu';
 
 interface SidebarProps {
@@ -22,6 +23,7 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen }) => {
   const [expandedSections, setExpandedSections] = useState<string[]>(DEFAULT_EXPANDED_SECTIONS);
   const location = useLocation();
+  const auth = useAuth();
 
   const toggleSection = (section: string) => {
     setExpandedSections((prev) =>
@@ -33,9 +35,16 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen }) => {
 
   const isActive = (path: string) => location.pathname === path;
 
+  const hasPermission = (item: MenuItem): boolean => {
+    if (!item.permission || item.permission.length === 0) {
+      return true;
+    }
+    return item.permission.some(perm => auth.profile.permissions.includes(perm));
+  };
+
   const renderMenuItems = (items: MenuItem[]) => (
     <Stack gap="xs" pl={sidebarOpen ? 'md' : 0}>
-      {items.map((item) => (
+      {items.filter(hasPermission).map((item) => (
         <NavLink
           key={item.path}
           component={Link}

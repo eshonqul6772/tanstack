@@ -1,5 +1,6 @@
 import { createRootRouteWithContext, createRoute, Outlet, type Route, redirect } from '@tanstack/react-router';
 import { lazy } from 'react';
+import type { PERMISSIONS } from '@/shared/lib/utils/enums';
 import ErrorComponent from '@/shared/ui/ErrorComponent';
 import Loading from '@/shared/ui/Loading';
 import MainLayout from '@/widgets/layout';
@@ -11,6 +12,7 @@ interface RouterContext {
     isAuthenticated: boolean;
     isFetched: boolean;
     token: string;
+    permissions: PERMISSIONS[];
     logout: () => void;
   };
 }
@@ -81,6 +83,15 @@ const createAppRoute = (config: (typeof allRoutes)[number]): Route<any> => {
             redirect: location.pathname + location.search
           }
         });
+      }
+
+      // ✅ PERMISSION CHECK
+      if (config.metadata.requiredPermissions && config.metadata.requiredPermissions.length > 0) {
+        const hasPermission = config.metadata.requiredPermissions.some(perm => context.auth.permissions.includes(perm));
+
+        if (!hasPermission) {
+          throw redirect({ to: '/no-access' });
+        }
       }
     }
   };
