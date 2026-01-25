@@ -15,12 +15,13 @@ import type React from 'react';
 import { useState } from 'react';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { DEFAULT_EXPANDED_SECTIONS, MENU_SECTIONS, type MenuItem } from './menu';
+import styles from './Sidebar.module.scss';
 
 interface SidebarProps {
-  sidebarOpen: boolean;
+  isOpenMenu: boolean;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen }) => {
+const Sidebar: React.FC<SidebarProps> = ({ isOpenMenu }) => {
   const [expandedSections, setExpandedSections] = useState<string[]>(DEFAULT_EXPANDED_SECTIONS);
   const location = useLocation();
   const auth = useAuth();
@@ -43,16 +44,16 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen }) => {
   };
 
   const renderMenuItems = (items: MenuItem[]) => (
-    <Stack gap="xs" pl={sidebarOpen ? 'md' : 0}>
+    <Stack gap="xs" pl={isOpenMenu ? 'md' : 0}>
       {items.filter(hasPermission).map((item) => (
         <NavLink
           key={item.path}
           component={Link}
           to={item.path}
-          label={sidebarOpen ? item.label : undefined}
+          label={isOpenMenu ? item.label : undefined}
           leftSection={<span style={{ fontSize: rem(18) }}>{item.icon}</span>}
           active={isActive(item.path)}
-          title={!sidebarOpen ? item.label : ''}
+          title={!isOpenMenu ? item.label : ''}
           styles={{
             root: {
               borderRadius: 'var(--mantine-radius-md)',
@@ -69,21 +70,9 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen }) => {
   );
 
   return (
-    <Box component="aside" h="100%" display="flex" style={{ flexDirection: 'column' }}>
-      {sidebarOpen && (
-        <Box
-          p="lg"
-          style={{
-            borderBottom: '1px solid #e5e5e5',
-            position: 'sticky',
-            top: 0,
-            backgroundColor: 'white',
-            zIndex: 10,
-            height: 87,
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
+    <Box component="aside" className={styles.sidebar}>
+      {isOpenMenu && (
+        <Box className={styles.header}>
           <Title order={2} size="h3">
             Ecme
           </Title>
@@ -93,16 +82,12 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen }) => {
       <Stack
         component="nav"
         gap="lg"
-        p="md"
-        style={{
-          flex: 1,
-          overflowY: 'auto',
-        }}
+        className={styles.nav}
       >
         {MENU_SECTIONS.map((section) => (
           <Box key={section.id}>
             <Group
-              justify={sidebarOpen ? 'space-between' : 'center'}
+              justify={isOpenMenu ? 'space-between' : 'center'}
               onClick={() => toggleSection(section.id)}
               style={{
                 cursor: 'pointer',
@@ -112,7 +97,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen }) => {
               }}
               className="hover-bg"
             >
-              {!sidebarOpen && (
+              {!isOpenMenu && (
                 <ActionIcon
                   variant="subtle"
                   size="lg"
@@ -122,7 +107,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen }) => {
                   <span style={{ fontSize: rem(18) }}>{section.icon}</span>
                 </ActionIcon>
               )}
-              {sidebarOpen && (
+              {isOpenMenu && (
                 <>
                   <Group gap="xs">
                     <span style={{ fontSize: rem(16) }}>{section.icon}</span>
@@ -153,16 +138,9 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen }) => {
         ))}
       </Stack>
 
-      {/* Footer Text */}
-      {sidebarOpen && (
-        <Box
-          p="md"
-          style={{
-            borderTop: '1px solid var(--mantine-colors-gray-2)',
-            flexShrink: 0,
-          }}
-        >
-          <Text size="xs" c="dimmed" ta="center">
+      {isOpenMenu && (
+        <Box className={styles.footer}>
+          <Text className={styles.footerText}>
             Copyright © 2026 <Text span fw={600}>
               Ecme
             </Text>{' '}
@@ -170,12 +148,6 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen }) => {
           </Text>
         </Box>
       )}
-
-      <style>{`
-        .hover-bg:hover {
-          background-color: var(--mantine-colors-gray-0);
-        }
-      `}</style>
     </Box>
   );
 };

@@ -5,8 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:dev": "vite --mode development",
     "build": "tsc -b && vite build",
+    "build:dev": "tsc -b && vite build --mode development",
+    "build:prod": "tsc -b && vite build --mode production",
     "preview": "vite preview",
+    "preview:dev": "vite preview --mode development",
+    "preview:prod": "vite preview --mode production",
     "format": "biome format . --write",
     "lint": "biome lint .",
     "check": "biome check . --write"
@@ -32,6 +37,7 @@
     "@tanstack/react-router": "^1.140.0",
     "@tanstack/react-table": "^8.21.3",
     "axios": "^1.13.2",
+    "classnames": "^2.5.1",
     "dayjs": "^1.11.19",
     "i18next": "^25.7.3",
     "i18next-http-backend": "^3.0.2",
@@ -55,6 +61,7 @@
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react-swc": "^4.2.2",
+    "terser": "^5.46.0",
     "typescript": "~5.9.3",
     "vite": "^7.2.4"
   }

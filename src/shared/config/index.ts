@@ -1,20 +1,22 @@
 const ENV = import.meta.env;
 
-const BASE_URL = ENV.VITE_APP_API_BASE_URL;
+// API Base URL - environment o'zgaruvchilardan
+const API_BASE_URL = ENV.VITE_API_BASE_URL || 'https://hudud.adliya.uz/api/v1';
+const APP_ENV = ENV.VITE_APP_ENV || 'development';
+const APP_DEBUG = ENV.VITE_APP_DEBUG === 'true';
+const LOG_LEVEL = ENV.VITE_APP_LOG_LEVEL || 'info';
 
 const config = {
   app: {
-    env: ENV.VITE_APP_ENV,
-    version: ENV.APP_VERSION,
-    cabinet: ENV.VITE_APP_CABINET,
-    isDev: ENV.VITE_APP_ENV !== 'production',
-    editorApiKey: ENV.VITE_APP_EDITOR_API_KEY
+    env: APP_ENV,
+    isDev: APP_ENV === 'local' || APP_ENV === 'development',
+    isProd: APP_ENV === 'production',
+    debug: APP_DEBUG,
+    logLevel: LOG_LEVEL,
+    version: '1.0.0'
   },
   api: {
-    baseUrl: BASE_URL + '/user/v1'
-  },
-  sentry: {
-    dsn: ENV.VITE_APP_SENTRY_DSN
+    baseUrl: API_BASE_URL
   },
   language: {
     key: 'language',

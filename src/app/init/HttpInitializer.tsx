@@ -34,7 +34,7 @@ const HttpInitializer = () => {
     });
 
     http.init({
-      baseURL: 'https://hudud.adliya.uz/api/v1'
+      baseURL: config.api.baseUrl
     });
   }, [auth]);
 
