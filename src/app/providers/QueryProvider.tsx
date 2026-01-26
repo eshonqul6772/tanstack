@@ -7,9 +7,9 @@ import config from '@/shared/config';
 
 import { MESSAGE_TYPE } from '@/shared/lib/utils/enums';
 
-const queryResponseHandler = (data: any) => {
-  const type = get(data, 'data.message.type');
-  const message = get(data, 'data.message.message');
+const queryResponseHandler = (data: unknown) => {
+  const type = get(data, 'data.message.type') as MESSAGE_TYPE | undefined;
+  const message = get(data, 'data.message.message') as string | undefined;
 
   if (type && message) {
     if (type === MESSAGE_TYPE.INFO) {

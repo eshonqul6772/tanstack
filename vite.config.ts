@@ -1,10 +1,9 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react-swc';
-import path from 'path';
+import path from 'node:path';
 import { defineConfig, loadEnv } from 'vite';
 
 export default defineConfig(({ mode }) => {
-  // Load environment variables based on mode
   const env = loadEnv(mode, process.cwd());
 
   return {
@@ -26,7 +25,7 @@ export default defineConfig(({ mode }) => {
     build: {
       target: 'ES2022',
       minify: 'terser',
-      sourcemap: mode === 'production' ? false : true
+      sourcemap: mode !== 'production'
     }
   };
 });

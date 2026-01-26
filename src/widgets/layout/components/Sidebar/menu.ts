@@ -1,4 +1,4 @@
-  import type { PERMISSIONS } from '@/shared/lib/utils/enums';
+import type { PERMISSIONS } from '@/shared/lib/utils/enums';
 
 export interface MenuItem {
   label: string;
@@ -23,8 +23,8 @@ export const MENU_SECTIONS: MenuSection[] = [
       { label: 'Ecommerce', path: '/dashboard', icon: '🛍', permission: ['VIEW_USERS'] },
       { label: 'Project', path: '/project', icon: '📋', permission: ['VIEW_USER'] },
       { label: 'Marketing', path: '/marketing', icon: '📊', permission: ['CREATE_USER'] },
-      { label: 'Analytic', path: '/analytic', icon: '📈', permission: ['UPDATE_USER'] },
-    ],
+      { label: 'Analytic', path: '/analytic', icon: '📈', permission: ['UPDATE_USER'] }
+    ]
   },
   {
     id: 'CONCEPTS',
@@ -41,9 +41,9 @@ export const MENU_SECTIONS: MenuSection[] = [
       { label: 'Calendar', path: '/calendar', icon: '📅', permission: ['VIEW_TRANSLATION'] },
       { label: 'File Manager', path: '/files', icon: '📁', permission: ['CREATE_TRANSLATION'] },
       { label: 'Mail', path: '/mail', icon: '✉', permission: ['UPDATE_TRANSLATION'] },
-      { label: 'Chat', path: '/chat', icon: '💬', permission: ['DELETE_TRANSLATION'] },
-    ],
-  },
+      { label: 'Chat', path: '/chat', icon: '💬', permission: ['DELETE_TRANSLATION'] }
+    ]
+  }
 ];
 
 export const DEFAULT_EXPANDED_SECTIONS = ['DASHBOARD'];

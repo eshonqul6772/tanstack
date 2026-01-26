@@ -22,6 +22,7 @@ const Login: React.FC = () => {
               <div className={cls.logoContainer}>
                 <div className={cls.logo}>
                   <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <title>App logo</title>
                     <path d="M20 2L28 8V20L20 26L12 20V8L20 2Z" fill="#1971C2" />
                   </svg>
                 </div>

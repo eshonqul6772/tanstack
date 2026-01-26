@@ -38,7 +38,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
     if (error) {
       dispatch(Actions.Logout.request());
     }
-  }, [data, error, dispatch]);
+  }, [data, error]);
 
   return <AuthProviderComp value={{ state, dispatch }}>{children}</AuthProviderComp>;
 };

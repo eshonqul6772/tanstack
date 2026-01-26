@@ -5,14 +5,14 @@ import config from '@/shared/config';
 import { STATUS, STATUS_VARIANT } from '@/shared/lib/utils/enums';
 import type { IActionBy, IFile, IIdAndMultiName, IIdAndName, IMeta, IMultiName } from '@/shared/lib/utils/interfaces';
 
-export const getMeta = (item?: any): IMeta => ({
+export const getMeta = (item?: unknown): IMeta => ({
   totalPages: get(item, 'totalPages') || 0,
   totalItems: get(item, 'totalCount') || 0,
   current: get(item, 'page') ? get(item, 'page') + 1 : 1,
   perPage: get(item, 'size') || 1
 });
 
-export const getFile = (item?: any): IFile => {
+export const getFile = (item?: unknown): IFile => {
   const uuid = get(item, 'uuid') || '';
   const type = get((get(item, 'type') || '').split('/'), '[0]') || '';
 
@@ -63,7 +63,7 @@ export const getActionBy = (item?: IActionBy): IActionBy => ({
   status: get(item, 'status') || STATUS.INACTIVE
 });
 
-export const getStatus = (item: any) => {
+export const getStatus = (item: unknown) => {
   const status = (get(item, 'status') || '') as STATUS;
   return {
     value: status,

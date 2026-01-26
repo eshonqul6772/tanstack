@@ -20,16 +20,6 @@ export const allRoutes = [
       requiresAuth: true,
       requiredPermissions: [] as PERMISSIONS[]
     }
-  },
-  {
-    key: 'notfound',
-    path: '*',
-    component: () => import('@/pages/NotFound'),
-    metadata: {
-      title: 'Page Not Found',
-      requiresAuth: true,
-      requiredPermissions: [] as PERMISSIONS[]
-    }
   }
 ] as const;
 

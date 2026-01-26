@@ -1,5 +1,5 @@
 import type React from 'react';
-import { Menu, } from '@mantine/core';
+import { Menu } from '@mantine/core';
 import { IconSettings, IconLogout, IconMenu2, IconX } from '@tabler/icons-react';
 import { useAuth } from '@/features/auth/hooks';
 import cls from './Header.module.scss';
@@ -15,10 +15,7 @@ const Header: React.FC<HeaderProps> = ({ isOpenMenu, onToggleMenu }) => {
   return (
     <header className={cls.header}>
       <div className={cls.container}>
-        <button
-          className={cls.toggleButton}
-          onClick={() => onToggleMenu(!isOpenMenu)}
-        >
+        <button type="button" className={cls.toggleButton} onClick={() => onToggleMenu(!isOpenMenu)}>
           {isOpenMenu ? <IconX size={24} /> : <IconMenu2 size={24} />}
         </button>
 
@@ -26,22 +23,14 @@ const Header: React.FC<HeaderProps> = ({ isOpenMenu, onToggleMenu }) => {
           <Menu position="bottom-end" shadow="md" withArrow>
             <Menu.Target>
               <div className={cls.userMenuGroup}>
-                <div className={cls.avatar}>
-                  {profile?.firstName?.charAt(0).toUpperCase() || 'U'}
-                </div>
+                <div className={cls.avatar}>{profile?.firstName?.charAt(0).toUpperCase() || 'U'}</div>
               </div>
             </Menu.Target>
 
             <Menu.Dropdown>
-              <Menu.Item leftSection={<IconSettings size={14} />}>
-                Settings
-              </Menu.Item>
+              <Menu.Item leftSection={<IconSettings size={14} />}>Settings</Menu.Item>
               <Menu.Divider />
-              <Menu.Item
-                color="red"
-                leftSection={<IconLogout size={14} />}
-                onClick={() => methods.logout()}
-              >
+              <Menu.Item color="red" leftSection={<IconLogout size={14} />} onClick={() => methods.logout()}>
                 Logout
               </Menu.Item>
             </Menu.Dropdown>

@@ -6,13 +6,20 @@ import HttpInitializer from '@/app/init/HttpInitializer';
 import { routeTree } from '@/app/router/routeTree';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import config from '@/shared/config';
+import type { PERMISSIONS } from '@/shared/lib/utils/enums';
 
 const router = createRouter({
   routeTree,
   defaultPreload: 'intent',
   defaultStaleTime: 1000 * 60 * 5,
   context: {
-    auth: undefined!
+    auth: {
+      isAuthenticated: false,
+      isFetched: false,
+      token: '',
+      permissions: [] as PERMISSIONS[],
+      logout: () => {}
+    }
   }
 });
 
@@ -32,10 +39,10 @@ const RouterProvider = () => {
         isFetched: auth.isFetched,
         token: auth.token || '',
         permissions: auth.profile.permissions || [],
-        logout: () => auth.methods.logout()
+        logout: auth.methods.logout
       }
     }),
-    [auth.isAuthenticated, auth.isFetched, auth.token, auth.profile.permissions]
+    [auth.isAuthenticated, auth.isFetched, auth.token, auth.profile.permissions, auth.methods.logout]
   );
 
   React.useEffect(() => {
@@ -45,7 +52,7 @@ const RouterProvider = () => {
     if (!auth.isAuthenticated && auth.isFetched && !auth.token) {
       router.navigate({ to: '/login' });
     }
-  }, [auth.isAuthenticated, auth.isFetched, auth.token, router]);
+  }, [auth.isAuthenticated, auth.isFetched, auth.token]);
 
   return (
     <>

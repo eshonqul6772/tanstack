@@ -9,10 +9,10 @@ const Footer: React.FunctionComponent = () => {
             Copyright © 2026 <span className="font-semibold">Ecme</span> All rights reserved.
           </p>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-gray-700 transition">
+            <a href="/terms" className="hover:text-gray-700 transition">
               Term & Conditions
             </a>
-            <a href="#" className="hover:text-gray-700 transition">
+            <a href="/privacy" className="hover:text-gray-700 transition">
               Privacy & Policy
             </a>
           </div>

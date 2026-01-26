@@ -1,15 +1,5 @@
 import { Link, useLocation } from '@tanstack/react-router';
-import {
-  ActionIcon,
-  Box,
-  Collapse,
-  Group,
-  NavLink,
-  Stack,
-  Text,
-  Title,
-  rem,
-} from '@mantine/core';
+import { ActionIcon, Box, Collapse, Group, NavLink, Stack, Text, Title, rem } from '@mantine/core';
 import { IconChevronDown } from '@tabler/icons-react';
 import type React from 'react';
 import { useState } from 'react';
@@ -27,11 +17,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpenMenu }) => {
   const auth = useAuth();
 
   const toggleSection = (section: string) => {
-    setExpandedSections((prev) =>
-      prev.includes(section)
-        ? prev.filter((s) => s !== section)
-        : [...prev, section]
-    );
+    setExpandedSections(prev => (prev.includes(section) ? prev.filter(s => s !== section) : [...prev, section]));
   };
 
   const isActive = (path: string) => location.pathname === path;
@@ -45,7 +31,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpenMenu }) => {
 
   const renderMenuItems = (items: MenuItem[]) => (
     <Stack gap="xs" pl={isOpenMenu ? 'md' : 0}>
-      {items.filter(hasPermission).map((item) => (
+      {items.filter(hasPermission).map(item => (
         <NavLink
           key={item.path}
           component={Link}
@@ -60,9 +46,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpenMenu }) => {
               '&[data-active]': {
                 backgroundColor: 'var(--mantine-colors-blue-0)',
                 color: 'var(--mantine-colors-blue-6)',
-                fontWeight: 500,
-              },
-            },
+                fontWeight: 500
+              }
+            }
           }}
         />
       ))}
@@ -79,12 +65,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpenMenu }) => {
         </Box>
       )}
 
-      <Stack
-        component="nav"
-        gap="lg"
-        className={styles.nav}
-      >
-        {MENU_SECTIONS.map((section) => (
+      <Stack component="nav" gap="lg" className={styles.nav}>
+        {MENU_SECTIONS.map(section => (
           <Box key={section.id}>
             <Group
               justify={isOpenMenu ? 'space-between' : 'center'}
@@ -93,17 +75,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpenMenu }) => {
                 cursor: 'pointer',
                 padding: 'var(--mantine-spacing-xs) var(--mantine-spacing-sm)',
                 borderRadius: 'var(--mantine-radius-md)',
-                userSelect: 'none',
+                userSelect: 'none'
               }}
               className="hover-bg"
             >
               {!isOpenMenu && (
-                <ActionIcon
-                  variant="subtle"
-                  size="lg"
-                  radius="md"
-                  title={section.label}
-                >
+                <ActionIcon variant="subtle" size="lg" radius="md" title={section.label}>
                   <span style={{ fontSize: rem(18) }}>{section.icon}</span>
                 </ActionIcon>
               )}
@@ -119,9 +96,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpenMenu }) => {
                     size={18}
                     style={{
                       transition: 'transform 300ms ease-in-out',
-                      transform: expandedSections.includes(section.id)
-                        ? 'rotate(180deg)'
-                        : 'rotate(0deg)',
+                      transform: expandedSections.includes(section.id) ? 'rotate(180deg)' : 'rotate(0deg)'
                     }}
                   />
                 </>
@@ -141,7 +116,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpenMenu }) => {
       {isOpenMenu && (
         <Box className={styles.footer}>
           <Text className={styles.footerText}>
-            Copyright © 2026 <Text span fw={600}>
+            Copyright © 2026{' '}
+            <Text span fw={600}>
               Ecme
             </Text>{' '}
             All rights reserved.

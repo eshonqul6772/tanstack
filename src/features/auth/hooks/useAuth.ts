@@ -1,8 +1,21 @@
 import * as Api from '@/features/auth/api/api';
 import { useAuth as useAuthOriginal } from '@/features/auth/model/AuthContext';
 import * as Actions from '@/features/auth/model/actions';
+import type * as Types from '@/features/auth/model/types';
 
-let globalAuthStore: any = null;
+type AuthStore = {
+  isAuthenticated: boolean;
+  isFetched: boolean;
+  token: string;
+  profile: Types.IEntity.Profile;
+  state: Types.IState;
+  dispatch: ReturnType<typeof useAuthOriginal>['dispatch'];
+  methods: {
+    logout: () => Promise<void>;
+  };
+};
+
+let globalAuthStore: AuthStore | null = null;
 
 export const useAuth = () => {
   const { state, dispatch } = useAuthOriginal();
@@ -23,7 +36,7 @@ export const useAuth = () => {
           if (state.token) {
             await Api.Logout();
           }
-        } catch (error) {
+        } catch (_error) {
           // Xato bo'lsa ham logout qilish
         } finally {
           dispatch(Actions.Logout.success());

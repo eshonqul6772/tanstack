@@ -4,7 +4,7 @@ import { getFile, getIdAndName } from '@/shared/lib/utils/mappers';
 
 import type * as Types from './types';
 
-export const getProfile = (item?: any): Types.IEntity.Profile => {
+export const getProfile = (item?: unknown): Types.IEntity.Profile => {
   const firstName = get(item, 'firstName') || '';
   const lastName = get(item, 'lastName') || '';
   const middleName = get(item, 'middleName') || '';
@@ -23,6 +23,6 @@ export const getProfile = (item?: any): Types.IEntity.Profile => {
   };
 };
 
-export const getToken = (item?: any): Types.IEntity.Token => ({
+export const getToken = (item?: unknown): Types.IEntity.Token => ({
   accessToken: get(item, 'accessToken') || ''
 });

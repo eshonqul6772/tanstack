@@ -14,6 +14,11 @@ import { DebouncedInput } from './debouncedInput';
 export const DEFAULT_PAGE_INDEX = 0;
 export const DEFAULT_PAGE_SIZE = 10;
 
+type ColumnMeta<T> = {
+  filterKey?: keyof T;
+  filterVariant?: 'number' | 'text';
+};
+
 type Props<T extends Record<string, string | number>> = {
   data: T[];
   columns: ColumnDef<T>[];
@@ -54,7 +59,7 @@ export default function Table<T extends Record<string, string | number>>({
           {table.getHeaderGroups().map(headerGroup => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map(header => {
-                const fieldMeta: any = header.column.columnDef.meta;
+                const fieldMeta = header.column.columnDef.meta as ColumnMeta<T> | undefined;
                 return (
                   <th key={header.id} colSpan={header.colSpan}>
                     {header.isPlaceholder ? null : (
@@ -107,6 +112,7 @@ export default function Table<T extends Record<string, string | number>>({
       </table>
       <div className="flex items-center gap-2 my-2">
         <button
+          type="button"
           className="border rounded p-1 disabled:text-gray-500 disabled:cursor-not-allowed"
           onClick={() => table.setPageIndex(0)}
           disabled={!table.getCanPreviousPage()}
@@ -114,6 +120,7 @@ export default function Table<T extends Record<string, string | number>>({
           {'<<'}
         </button>
         <button
+          type="button"
           className="border rounded p-1 disabled:text-gray-500 disabled:cursor-not-allowed"
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
@@ -121,6 +128,7 @@ export default function Table<T extends Record<string, string | number>>({
           {'<'}
         </button>
         <button
+          type="button"
           className="border rounded p-1 disabled:text-gray-500 disabled:cursor-not-allowed"
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
@@ -128,6 +136,7 @@ export default function Table<T extends Record<string, string | number>>({
           {'>'}
         </button>
         <button
+          type="button"
           className="border rounded p-1 disabled:text-gray-500 disabled:cursor-not-allowed"
           onClick={() => table.setPageIndex(table.getPageCount() - 1)}
           disabled={!table.getCanNextPage()}

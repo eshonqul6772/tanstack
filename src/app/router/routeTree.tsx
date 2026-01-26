@@ -1,9 +1,10 @@
-import { createRootRouteWithContext, createRoute, Outlet, type Route, redirect } from '@tanstack/react-router';
+import { createRootRouteWithContext, createRoute, Outlet, redirect } from '@tanstack/react-router';
 import { lazy } from 'react';
 import type { PERMISSIONS } from '@/shared/lib/utils/enums';
 import ErrorComponent from '@/shared/ui/ErrorComponent';
 import Loading from '@/shared/ui/Loading';
 import MainLayout from '@/widgets/layout';
+import NotFound from '@/pages/NotFound';
 
 import { allRoutes } from './routes';
 
@@ -22,13 +23,15 @@ const RootComponent = () => <Outlet />;
 const rootRoute = createRootRouteWithContext<RouterContext>()({
   component: RootComponent,
   pendingComponent: Loading,
-  errorComponent: ErrorComponent
+  errorComponent: ErrorComponent,
+  notFoundComponent: NotFound
 });
 
 const layoutRoute = createRoute({
   getParentRoute: () => rootRoute,
   id: 'layout',
-  component: MainLayout
+  component: MainLayout,
+  notFoundComponent: NotFound
 });
 
 const IndexComponent = () => null;
@@ -48,12 +51,12 @@ const indexRoute = createRoute({
 });
 
 // 🔹 Route factory
-const createAppRoute = (config: (typeof allRoutes)[number]): Route<any> => {
+const createAppRoute = (config: (typeof allRoutes)[number]) => {
   const LazyComponent = lazy(() => config.component().then(m => ({ default: m.default })));
 
   const parentRoute = config.metadata.requiresAuth ? layoutRoute : rootRoute;
 
-  const routeConfig: any = {
+  const routeConfig = {
     getParentRoute: () => parentRoute,
     path: config.path,
     component: LazyComponent

@@ -38,12 +38,7 @@ const NotFound: React.FC = () => {
             >
               {t('back_to_dashboard') || 'Dashboard'}
             </Button>
-            <Button
-              size="md"
-              variant="outline"
-              color="blue"
-              onClick={() => navigate({ to: '/' })}
-            >
+            <Button size="md" variant="outline" color="blue" onClick={() => navigate({ to: '/' })}>
               {t('home') || 'Home'}
             </Button>
           </Group>

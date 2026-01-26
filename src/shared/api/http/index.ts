@@ -51,24 +51,31 @@ class Http {
     return this.instance;
   }
 
+  private getInstance(): AxiosInstance {
+    if (!this.instance) {
+      throw new Error('HTTP client not initialized. Call init() before making requests.');
+    }
+    return this.instance;
+  }
+
   public get<T = unknown>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
-    return this.instance!.get<T>(url, config);
+    return this.getInstance().get<T>(url, config);
   }
 
   public post<T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
-    return this.instance!.post<T>(url, data, config);
+    return this.getInstance().post<T>(url, data, config);
   }
 
   public put<T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
-    return this.instance!.put<T>(url, data, config);
+    return this.getInstance().put<T>(url, data, config);
   }
 
   public patch<T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
-    return this.instance!.patch<T>(url, data, config);
+    return this.getInstance().patch<T>(url, data, config);
   }
 
   public delete<T = unknown>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
-    return this.instance!.delete<T>(url, config);
+    return this.getInstance().delete<T>(url, config);
   }
 }
 

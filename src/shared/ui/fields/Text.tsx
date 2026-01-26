@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 interface IProps extends Omit<TextInputProps, 'value' | 'onChange' | 'form'> {
   name: string;
-  form: UseFormReturnType<any>;
+  form: UseFormReturnType<Record<string, string | number | null | undefined>>;
   onChange?: (value: string) => void;
   validation?: {
     required?: boolean;
@@ -16,11 +16,13 @@ interface IProps extends Omit<TextInputProps, 'value' | 'onChange' | 'form'> {
 
 const Text: React.FC<IProps> = ({ name, form, validation, onChange, ...props }) => {
   const { t } = useTranslation();
+  const rawValue = form.values[name];
+  const inputValue = rawValue === undefined || rawValue === null ? '' : String(rawValue);
 
   return (
     <TextInput
       {...props}
-      value={form.values[name] || ''}
+      value={inputValue}
       error={form.errors[name]}
       placeholder={props.placeholder || t('field_enter')}
       onChange={event => {
