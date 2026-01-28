@@ -1,179 +1,170 @@
-import {
-  type ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  type OnChangeFn,
-  type PaginationOptions,
-  type PaginationState,
-  type SortingState,
-  useReactTable
-} from '@tanstack/react-table';
-import type { Filters } from '@/entities/user/types';
-import { DebouncedInput } from './debouncedInput';
+import { Group, Table as MantineTable, Pagination, Select, Stack, Text, TextInput } from '@mantine/core';
+import type { ReactNode } from 'react';
+import type { Filters, PaginationParams } from '@/widgets/layout/components/Sidebar/menu';
 
 export const DEFAULT_PAGE_INDEX = 0;
 export const DEFAULT_PAGE_SIZE = 10;
 
-type ColumnMeta<T> = {
-  filterKey?: keyof T;
-  filterVariant?: 'number' | 'text';
-};
+export type SortDirection = 'asc' | 'desc' | null;
 
-type Props<T extends Record<string, string | number>> = {
+export interface SortingState {
+  id: string;
+  desc: boolean;
+}
+
+export interface ColumnDef<T> {
+  id?: string;
+  accessorKey?: keyof T | string;
+  header: ReactNode | ((props: any) => ReactNode);
+  cell?: (props: { row: { original: T } }) => ReactNode;
+  enableSorting?: boolean;
+  meta?: {
+    filterKey?: keyof T;
+    filterVariant?: 'number' | 'text';
+  };
+}
+
+type Props<T extends Record<string, any>> = {
   data: T[];
   columns: ColumnDef<T>[];
-  pagination: PaginationState;
-  paginationOptions: Pick<PaginationOptions, 'onPaginationChange' | 'rowCount'>;
+  pagination: PaginationParams;
+  onPaginationChange: (pagination: PaginationParams) => void;
+  rowCount: number;
   filters: Filters<T>;
   onFilterChange: (dataFilters: Partial<T>) => void;
-  sorting: SortingState;
-  onSortingChange: OnChangeFn<SortingState>;
+  sorting: SortingState[];
+  onSortingChange: (sorting: SortingState[]) => void;
 };
 
-export default function Table<T extends Record<string, string | number>>({
+export default function Table<T extends Record<string, any>>({
   data,
   columns,
   pagination,
-  paginationOptions,
+  onPaginationChange,
+  rowCount,
   filters,
   onFilterChange,
   sorting,
   onSortingChange
 }: Props<T>) {
-  const table = useReactTable({
-    data,
-    columns,
-    state: { pagination, sorting },
-    onSortingChange,
-    ...paginationOptions,
-    manualFiltering: true,
-    manualSorting: true,
-    manualPagination: true,
-    getCoreRowModel: getCoreRowModel()
-  });
+  const handleSort = (columnId: string) => {
+    const currentSort = sorting.find(s => s.id === columnId);
+    if (!currentSort) {
+      onSortingChange([{ id: columnId, desc: false }]);
+    } else if (!currentSort.desc) {
+      onSortingChange([{ id: columnId, desc: true }]);
+    } else {
+      onSortingChange([]);
+    }
+  };
+
+  const getSortIcon = (columnId: string) => {
+    const currentSort = sorting.find(s => s.id === columnId);
+    if (!currentSort) return ' 🔃';
+    return currentSort.desc ? ' 🔽' : ' 🔼';
+  };
+
+  const pageCount = Math.ceil(rowCount / (pagination.pageSize || DEFAULT_PAGE_SIZE));
+
+  const getNestedValue = (obj: any, path: string) => {
+    return path.split('.').reduce((acc, part) => acc && acc[part], obj);
+  };
+
+  const renderHeader = (column: ColumnDef<T>) => {
+    if (typeof column.header === 'function') {
+      return column.header({});
+    }
+    return column.header;
+  };
+
+  const renderCell = (column: ColumnDef<T>, row: T) => {
+    if (column.cell) {
+      return column.cell({ row: { original: row } });
+    }
+    const accessor = column.accessorKey as string;
+    return accessor ? getNestedValue(row, accessor) : null;
+  };
 
   return (
-    <div>
-      <table>
-        <thead>
-          {table.getHeaderGroups().map(headerGroup => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map(header => {
-                const fieldMeta = header.column.columnDef.meta as ColumnMeta<T> | undefined;
-                return (
-                  <th key={header.id} colSpan={header.colSpan}>
-                    {header.isPlaceholder ? null : (
-                      <>
-                        <div
-                          {...{
-                            className: header.column.getCanSort() ? 'cursor-pointer select-none' : '',
-                            onClick: header.column.getToggleSortingHandler()
-                          }}
-                        >
-                          {flexRender(header.column.columnDef.header, header.getContext())}
-                          {{
-                            asc: ' 🔼',
-                            desc: ' 🔽',
-                            false: ' 🔃'
-                          }[header.column.getIsSorted() as string] ?? null}
-                        </div>
-                        {header.column.getCanFilter() && fieldMeta?.filterKey !== undefined ? (
-                          <DebouncedInput
-                            className="w-36 border shadow rounded"
-                            onChange={value => {
-                              onFilterChange({
-                                [fieldMeta.filterKey as keyof T]: value
-                              } as Partial<T>);
-                            }}
-                            placeholder="Search..."
-                            type={fieldMeta.filterVariant === 'number' ? 'number' : 'text'}
-                            value={filters[fieldMeta.filterKey] ?? ''}
-                          />
-                        ) : null}
-                      </>
-                    )}
-                  </th>
-                );
-              })}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map(row => {
-            return (
-              <tr key={row.id}>
-                {row.getVisibleCells().map(cell => {
-                  return <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>;
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-      <div className="flex items-center gap-2 my-2">
-        <button
-          type="button"
-          className="border rounded p-1 disabled:text-gray-500 disabled:cursor-not-allowed"
-          onClick={() => table.setPageIndex(0)}
-          disabled={!table.getCanPreviousPage()}
-        >
-          {'<<'}
-        </button>
-        <button
-          type="button"
-          className="border rounded p-1 disabled:text-gray-500 disabled:cursor-not-allowed"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          {'<'}
-        </button>
-        <button
-          type="button"
-          className="border rounded p-1 disabled:text-gray-500 disabled:cursor-not-allowed"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          {'>'}
-        </button>
-        <button
-          type="button"
-          className="border rounded p-1 disabled:text-gray-500 disabled:cursor-not-allowed"
-          onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-          disabled={!table.getCanNextPage()}
-        >
-          {'>>'}
-        </button>
-        <span className="flex items-center gap-1">
-          <div>Page</div>
-          <strong>
-            {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
-          </strong>
-        </span>
-        <span className="flex items-center gap-1">
-          | Go to page:
-          <input
-            type="number"
-            value={table.getState().pagination.pageIndex + 1}
-            onChange={e => {
-              const page = e.target.value ? Number(e.target.value) - 1 : 0;
-              table.setPageIndex(page);
-            }}
-            className="border p-1 rounded w-16"
+    <Stack gap="md">
+      <MantineTable striped highlightOnHover withTableBorder withColumnBorders>
+        <MantineTable.Thead>
+          <MantineTable.Tr>
+            {columns.map((column, index) => {
+              const columnId = column.id || (column.accessorKey as string) || index.toString();
+              const isSortable = column.enableSorting !== false && !!column.accessorKey;
+
+              return (
+                <MantineTable.Th key={columnId}>
+                  <Stack gap="xs">
+                    <Group
+                      gap="xs"
+                      style={{ cursor: isSortable ? 'pointer' : 'default' }}
+                      onClick={() => isSortable && handleSort(columnId)}
+                    >
+                      <Text fw={700} size="sm">
+                        {renderHeader(column)}
+                      </Text>
+                      {isSortable && getSortIcon(columnId)}
+                    </Group>
+                    {column.meta?.filterKey ? (
+                      <TextInput
+                        size="xs"
+                        onChange={e => {
+                          onFilterChange({
+                            [column.meta!.filterKey as keyof T]: e.currentTarget.value
+                          } as Partial<T>);
+                        }}
+                        placeholder="Search..."
+                        type={column.meta.filterVariant === 'number' ? 'number' : 'text'}
+                        value={(filters[column.meta.filterKey] as string) ?? ''}
+                      />
+                    ) : null}
+                  </Stack>
+                </MantineTable.Th>
+              );
+            })}
+          </MantineTable.Tr>
+        </MantineTable.Thead>
+        <MantineTable.Tbody>
+          {data.length > 0 ? (
+            data.map((row, rowIndex) => (
+              <MantineTable.Tr key={row.id || rowIndex}>
+                {columns.map(column => (
+                  <MantineTable.Td key={column.id}>{renderCell(column, row)}</MantineTable.Td>
+                ))}
+              </MantineTable.Tr>
+            ))
+          ) : (
+            <MantineTable.Tr>
+              <MantineTable.Td colSpan={columns.length} align="center">
+                No data
+              </MantineTable.Td>
+            </MantineTable.Tr>
+          )}
+        </MantineTable.Tbody>
+      </MantineTable>
+
+      <Group justify="space-between">
+        <Group gap="xs">
+          <Text size="sm">Show</Text>
+          <Select
+            size="xs"
+            w={70}
+            value={pagination.pageSize.toString()}
+            onChange={value => onPaginationChange({ ...pagination, pageSize: Number(value), pageIndex: 0 })}
+            data={['10', '20', '30', '40', '50']}
           />
-        </span>
-        <select
-          value={table.getState().pagination.pageSize}
-          onChange={e => {
-            table.setPageSize(Number(e.target.value));
-          }}
-        >
-          {[10, 20, 30, 40, 50].map(pageSize => (
-            <option key={pageSize} value={pageSize}>
-              Show {pageSize}
-            </option>
-          ))}
-        </select>
-      </div>
-    </div>
+          <Text size="sm">per page</Text>
+        </Group>
+
+        <Pagination
+          total={pageCount}
+          value={pagination.pageIndex + 1}
+          onChange={page => onPaginationChange({ ...pagination, pageIndex: page - 1 })}
+          size="sm"
+        />
+      </Group>
+    </Stack>
   );
 }

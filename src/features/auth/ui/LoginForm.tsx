@@ -1,6 +1,8 @@
+import type React from 'react';
 import { useForm } from '@mantine/form';
 import { useMutation } from '@tanstack/react-query';
-import type React from 'react';
+
+import { FormProvider } from '@/shared/ui/fields';
 
 import * as Api from '@/features/auth/api/api';
 import * as Mappers from '@/features/auth/model/mappers';
@@ -43,7 +45,11 @@ const Login: React.FC<IProps> = ({ onSuccess, onError, children }) => {
     });
   });
 
-  return <form onSubmit={handleSubmit}>{children(form)}</form>;
+  return (
+    <form onSubmit={handleSubmit}>
+      <FormProvider form={form}>{children(form)}</FormProvider>
+    </form>
+  );
 };
 
 export default Login;

@@ -34,7 +34,30 @@
     "enabled": true,
     "actions": {
       "source": {
-        "organizeImports": "on"
+        "organizeImports": {
+          "level": "on",
+          "options": {
+            "groups": [
+              [":NODE:"],
+              ":BLANK_LINE:",
+              ["react", "react/**"],
+              [":PACKAGE:"],
+              ":BLANK_LINE:",
+              ["@/shared", "@/shared/**"],
+              ":BLANK_LINE:",
+              ["@/features", "@/features/**"],
+              ":BLANK_LINE:",
+              ["@/entities", "@/entities/**"],
+              ":BLANK_LINE:",
+              ["@/pages", "@/pages/**"],
+              ":BLANK_LINE:",
+              [":ALIAS:"],
+              ":BLANK_LINE:",
+              [":PATH:"]
+            ],
+            "identifierOrder": "lexicographic"
+          }
+        }
       }
     }
   }

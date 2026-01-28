@@ -56,7 +56,7 @@ const createAppRoute = (config: (typeof allRoutes)[number]) => {
 
   const parentRoute = config.metadata.requiresAuth ? layoutRoute : rootRoute;
 
-  const routeConfig = {
+  const routeConfig: any = {
     getParentRoute: () => parentRoute,
     path: config.path,
     component: LazyComponent

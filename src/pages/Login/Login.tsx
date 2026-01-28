@@ -1,12 +1,12 @@
-import { Anchor, Button, Container, Divider, Group, Loader, Paper, Stack, Text, Title } from '@mantine/core';
 import type React from 'react';
+import { Anchor, Button, Container, Divider, Group, Loader, Paper, Stack, Text, Title } from '@mantine/core';
+
+import storage from '@/shared/lib/storage';
+import * as Fields from '@/shared/ui/fields';
 
 import { useAuth } from '@/features/auth/model/AuthContext';
 import * as Actions from '@/features/auth/model/actions';
-
 import * as Forms from '@/features/auth/ui';
-import storage from '@/shared/lib/storage';
-import * as Fields from '@/shared/ui/fields';
 
 import cls from './Login.module.scss';
 

@@ -13,12 +13,24 @@ interface IProps {
   onChange: (language: string) => void;
 }
 
+let initialized = false;
+let languageChangedHandler: ((language: string) => void) | null = null;
+
 export const init = ({ languages, currentLanguage, initialLanguage, backend, debug, onChange }: IProps) => {
-  i18n.on('languageChanged', language => {
+  if (languageChangedHandler) {
+    i18n.off('languageChanged', languageChangedHandler);
+  }
+
+  languageChangedHandler = language => {
     onChange(language);
-  });
+  };
+
+  i18n.on('languageChanged', languageChangedHandler);
 
   const checkedCurrentLanguage = languages.find(l => l === currentLanguage) || initialLanguage;
+
+  if (initialized || i18n.isInitialized) return;
+  initialized = true;
 
   i18n
     .use(initReactI18next)

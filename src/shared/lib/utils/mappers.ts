@@ -1,4 +1,4 @@
-import { get } from 'lodash';
+import get from 'lodash/get';
 
 import config from '@/shared/config';
 
@@ -8,7 +8,11 @@ import type { IActionBy, IFile, IIdAndMultiName, IIdAndName, IMeta, IMultiName }
 export const getMeta = (item?: unknown): IMeta => ({
   totalPages: get(item, 'totalPages') || 0,
   totalItems: get(item, 'totalCount') || 0,
-  current: get(item, 'page') ? get(item, 'page') + 1 : 1,
+  current: (() => {
+    const page = get(item, 'page');
+    const pageNumber = typeof page === 'number' ? page : Number(page);
+    return Number.isFinite(pageNumber) ? pageNumber + 1 : 1;
+  })(),
   perPage: get(item, 'size') || 1
 });
 
@@ -17,7 +21,7 @@ export const getFile = (item?: unknown): IFile => {
   const type = get((get(item, 'type') || '').split('/'), '[0]') || '';
 
   return {
-    id: get(item, 'id') as number,
+    id: get(item, 'id') as unknown as number,
     name: get(item, 'name') || '',
     url: `${config.api.baseUrl}/references/download/${uuid}`,
     size: getFileSize(get(item, 'size') || 0),

@@ -20,6 +20,26 @@ export const allRoutes = [
       requiresAuth: true,
       requiredPermissions: [] as PERMISSIONS[]
     }
+  },
+  {
+    key: 'users',
+    path: '/users',
+    component: () => import('@/pages/User'),
+    metadata: {
+      title: 'Users',
+      requiresAuth: true,
+      requiredPermissions: ['VIEW_USERS'] as PERMISSIONS[]
+    }
+  },
+  {
+    key: 'translations',
+    path: '/translations',
+    component: () => import('@/pages/Translation'),
+    metadata: {
+      title: 'Translations',
+      requiresAuth: true,
+      requiredPermissions: ['VIEW_USERS'] as PERMISSIONS[]
+    }
   }
 ] as const;
 

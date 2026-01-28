@@ -8,10 +8,20 @@ import config from '@/shared/config';
 import * as i18n from '@/shared/lib/i18n';
 import storage from '@/shared/lib/storage';
 
+let initialized = false;
+
 const HttpInitializer = () => {
   const auth = useAuth();
+  const authRef = React.useRef(auth);
 
   React.useEffect(() => {
+    authRef.current = auth;
+  }, [auth]);
+
+  React.useEffect(() => {
+    if (initialized) return;
+    initialized = true;
+
     if (config.app.isDev) {
       console.log('%cADMIN DEVELOPMENT MODE', 'color: red; font-size: 32px;');
     } else {
@@ -23,7 +33,7 @@ const HttpInitializer = () => {
       currentLanguage: storage.local.get(config.language.key),
       initialLanguage: config.language.initial,
       backend: {
-        loadPath: `${config.api.baseUrl}/reference/translations/ADMIN_CABINET`
+        loadPath: `http://localhost:4445/api/v1/references/translations/ADMIN_CABINET/uz`
       },
       onChange: language => storage.local.set('language', language)
     });
