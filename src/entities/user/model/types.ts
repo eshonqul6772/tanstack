@@ -39,3 +39,18 @@ export declare namespace IForm {
     status: STATUS;
   }
 }
+
+export declare namespace IQuery {
+  export interface List {
+    items: IEntity.User[];
+    meta: IMeta;
+  }
+
+  export interface Single {
+    item: IEntity.User;
+  }
+
+  export interface Delete {
+    id: string;
+  }
+}

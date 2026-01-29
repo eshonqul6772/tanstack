@@ -2,7 +2,7 @@ import get from 'lodash/get';
 
 import { getMultiName } from '@/shared/lib/utils/mappers';
 
-import * as Types from './types';
+import type * as Types from './types';
 
 export const getData = (item?: any): Types.IEntity.Data => ({
   id: get(item, 'id') || '',

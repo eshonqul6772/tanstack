@@ -1,4 +1,4 @@
-import { TextInput, type TextInputProps } from '@mantine/core';
+import { Textarea as MantineTextarea, type TextareaProps } from '@mantine/core';
 import type { UseFormReturnType } from '@mantine/form';
 import get from 'lodash/get';
 import { useTranslation } from 'react-i18next';
@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useFormContext } from './FormProvider';
 import type { StringFieldName } from './types';
 
-interface IProps<T extends Record<string, any>> extends Omit<TextInputProps, 'value' | 'onChange' | 'form'> {
+interface IProps<T extends Record<string, any>> extends Omit<TextareaProps, 'value' | 'onChange' | 'form'> {
   name: StringFieldName<T>;
   form?: UseFormReturnType<T>;
   onChange?: (value: string) => void;
@@ -17,12 +17,12 @@ interface IProps<T extends Record<string, any>> extends Omit<TextInputProps, 'va
   };
 }
 
-const Text = <T extends Record<string, any>>({ name, form, validation, onChange, ...props }: IProps<T>) => {
+const Textarea = <T extends Record<string, any>>({ name, form, validation, onChange, ...props }: IProps<T>) => {
   const { t } = useTranslation();
   const contextForm = useFormContext<T>();
   const currentForm = form ?? contextForm;
   if (!currentForm) {
-    throw new Error('Text field must be used inside FormProvider or receive form prop.');
+    throw new Error('Textarea field must be used inside FormProvider or receive form prop.');
   }
 
   const rawValue = get(currentForm.values, name);
@@ -38,7 +38,7 @@ const Text = <T extends Record<string, any>>({ name, form, validation, onChange,
   })();
 
   return (
-    <TextInput
+    <MantineTextarea
       {...props}
       value={inputValue}
       error={get(currentForm.errors, name) || validationError}
@@ -68,4 +68,4 @@ const Text = <T extends Record<string, any>>({ name, form, validation, onChange,
   );
 };
 
-export default Text;
+export default Textarea;

@@ -39,8 +39,8 @@ const HttpInitializer = () => {
     });
 
     setAuthHandlers({
-      getToken: () => auth.token,
-      onLogout: () => auth.methods.logout()
+      getToken: () => authRef.current.token,
+      onLogout: () => authRef.current.methods.logout()
     });
 
     http.init({

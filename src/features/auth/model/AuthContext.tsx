@@ -1,6 +1,7 @@
 import type React from 'react';
-import { createContext, type ReactNode, useContext } from 'react';
+import { type ReactNode, createContext, useContext } from 'react';
 import type { ActionType } from 'typesafe-actions';
+
 import type * as Actions from '@/features/auth/model/actions';
 import type * as Types from '@/features/auth/model/types';
 

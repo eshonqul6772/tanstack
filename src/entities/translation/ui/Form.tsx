@@ -1,38 +1,42 @@
-import { Button } from '@mantine/core';
-import type { UseFormReturnType } from '@mantine/form';
+import { Button, Grid } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
 
 import { STATUS } from '@/shared/lib/utils/enums.ts';
 import * as Fields from '@/shared/ui/fields';
 
-import type { IForm } from '../model/types.ts';
+export const Form = () => {
+  const { t } = useTranslation();
 
-interface Props {
-  form: UseFormReturnType<IForm.Values>;
-  onSubmit: (values: IForm.Values) => void;
-  loading?: boolean;
-}
-
-export const Form = ({ form, onSubmit, loading }: Props) => {
   return (
-    <form onSubmit={form.onSubmit(onSubmit)}>
-      <Fields.FormProvider form={form}>
-        <div className="grid grid-cols-2 gap-4">
-          <Fields.Text name="name" label="Name" />
-          <Fields.Text name="tag" label="Tag" />
-          <Fields.Text name="types" label="Types" />
-          <Fields.Select
-            name="status"
-            label="Status"
-            data={[
-              { value: STATUS.ACTIVE, label: 'Active' },
-              { value: STATUS.INACTIVE, label: 'Inactive' }
-            ]}
-          />
-        </div>
-      </Fields.FormProvider>
-      <Button type="submit" loading={loading} mt="md">
-        Save
-      </Button>
-    </form>
+    <Grid gutter="md">
+      <Grid.Col span={6}>
+        <Fields.Text name="name" label={t('translation_name')} />
+      </Grid.Col>
+      <Grid.Col span={6}>
+        <Fields.Text name="tag" label={t('translation_tag')} />
+      </Grid.Col>
+      <Grid.Col span={6}>
+        <Fields.Text name="types" label={t('translation_types')} />
+      </Grid.Col>
+      <Grid.Col span={6}>
+        <Fields.Select
+          name="status"
+          label={t('translation_status')}
+          data={[
+            { value: STATUS.ACTIVE, label: t('translation_status_active') },
+            { value: STATUS.INACTIVE, label: t('translation_status_inactive') }
+          ]}
+        />
+      </Grid.Col>
+
+      <Grid.Col span={12}>
+        <Button type="submit" mt="md">
+          {t('action_save')}
+        </Button>
+        <Button type="submit" mt="md">
+          {t('action_cancel')}
+        </Button>
+      </Grid.Col>
+    </Grid>
   );
 };

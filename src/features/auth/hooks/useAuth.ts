@@ -32,12 +32,10 @@ export const useAuth = () => {
       logout: async () => {
         dispatch(Actions.Logout.request());
         try {
-          // API'ga logout so'rovi yuborish
           if (state.token) {
             await Api.Logout();
           }
         } catch (_error) {
-          // Xato bo'lsa ham logout qilish
         } finally {
           dispatch(Actions.Logout.success());
         }

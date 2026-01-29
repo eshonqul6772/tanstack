@@ -1,13 +1,12 @@
 import { Badge, Group } from '@mantine/core';
 
 import { STATUS_VARIANT } from '@/shared/lib/utils/enums.ts';
-import type { ColumnDef } from '@/shared/ui/table/Table.tsx';
-import TableContainer from '@/shared/ui/table/TableContainer.tsx';
+import TableContainer, { type ColumnDef } from '@/shared/ui/table/TableContainer.tsx';
 import type { ListTableProps } from '@/shared/ui/table/types.ts';
 
 import type { IEntity } from '../model/types.ts';
 
-export const List = ({ data, pagination, rowCount, renderActions }: ListTableProps<IEntity.Data>) => {
+export const ListPaging = ({ data, pagination, rowCount, renderActions }: ListTableProps<IEntity.Data>) => {
   const columns: ColumnDef<IEntity.Data>[] = [
     {
       accessorKey: 'name',
@@ -30,7 +29,7 @@ export const List = ({ data, pagination, rowCount, renderActions }: ListTablePro
       }
     },
     {
-      id: 'actions',
+      accessorKey: 'actions',
       header: 'Actions',
       cell: ({ row }) => <Group gap="xs">{renderActions(row.original)}</Group>
     }

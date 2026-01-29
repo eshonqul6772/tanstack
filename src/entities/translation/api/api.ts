@@ -13,7 +13,7 @@ export const List = ({ params }: { params: IParams }): AxiosPromise<Types.IApi.L
     search: params.filter
   });
 
-export const Single = ({ id }: { id: string }): AxiosPromise<Types.IApi.Single.Response> =>
+export const Single = ({ id }: { id: number }): AxiosPromise<Types.IApi.Single.Response> =>
   http.get(`/admin/translations/${id}`);
 
 export const Create = ({ values }: { values: Types.IForm.Values }): AxiosPromise<Types.IApi.Single.Response> =>
@@ -28,7 +28,7 @@ export const Update = ({
   id,
   values
 }: {
-  id: string;
+  id: number;
   values: Types.IForm.Values;
 }): AxiosPromise<Types.IApi.Single.Response> =>
   http.put(`/admin/translations/${id}`, {
@@ -38,5 +38,5 @@ export const Update = ({
     status: values.status
   });
 
-export const Delete = ({ id }: { id: string }): AxiosPromise<Types.IApi.Single.Response> =>
+export const Delete = ({ id }: { id: number }): AxiosPromise<Types.IApi.Single.Response> =>
   http.delete(`/admin/translations/${id}`);

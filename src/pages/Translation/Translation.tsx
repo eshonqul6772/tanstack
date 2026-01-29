@@ -1,59 +1,88 @@
-import { useRouterState } from '@tanstack/react-router';
 import type React from 'react';
-import { type IEntity, List, useList } from '@/entities/translation';
-import { CreateTranslation, DeleteTranslation, UpdateTranslation } from '@/features/translation-management';
+import { useState } from 'react';
+import { ActionIcon, Button, Modal } from '@mantine/core';
+import { useRouterState } from '@tanstack/react-router';
+import { Pencil, Trash2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+
 import config from '@/shared/config';
+
+import { Create, Delete, Update } from '@/features/translation';
+
+import { ListPaging, useList } from '@/entities/translation';
+
 import type { PaginationParams } from '@/widgets/layout/components/Sidebar/menu';
 
+interface IModal {
+  id: number | null;
+  mode: 'DEFAULT' | 'CREATE' | 'UPDATE' | 'DELETE';
+}
+
+const initialValue: IModal = {
+  id: null,
+  mode: 'DEFAULT'
+};
+
 const TranslationPage: React.FC = () => {
+  const { t } = useTranslation();
   const search = useRouterState({ select: state => state.location.search }) as unknown as Record<string, unknown>;
+
+  const [modal, setModal] = useState<IModal>(initialValue);
 
   const page = Math.max(1, Number(search.page || 1));
   const perPage = Math.max(1, Number(search.perPage || config.list.perPage));
-  const sortParam = typeof search.sort === 'string' ? search.sort : '';
 
   const pagination: PaginationParams = {
     pageIndex: page - 1,
     pageSize: perPage
   };
 
-  const sort = sortParam
-    ? {
-        name: sortParam.startsWith('-') ? sortParam.slice(1) : sortParam,
-        direction: sortParam.startsWith('-') ? 'desc' : 'asc'
-      }
-    : undefined;
-
-  const { items, meta, refetch } = useList({
+  const { items, meta } = useList({
     params: {
       page,
-      perPage,
-      sort
+      perPage
     }
   });
 
-  const handleUpdateSuccess = (_: IEntity.Data) => {
-    refetch().then((r: any) => r);
+  const onCancel = () => {
+    setModal(initialValue);
   };
 
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Translations</h1>
-        <CreateTranslation onSuccess={() => refetch().then((r: any) => r)} />
+        <Button onClick={() => setModal({ id: null, mode: 'CREATE' })}>{t('create_translation')}</Button>
       </div>
 
-      <List
+      <ListPaging
         data={items}
         pagination={pagination}
         rowCount={meta.totalItems}
-        renderActions={translation => (
+        renderActions={item => (
           <>
-            <UpdateTranslation translation={translation} onSuccess={handleUpdateSuccess} />
-            <DeleteTranslation id={translation.id} onSuccess={() => refetch().then((r: any) => r)} />
+            <ActionIcon variant="light" color="red" onClick={() => setModal({ id: item.id, mode: 'DELETE' })}>
+              <Trash2 />
+            </ActionIcon>
+            <ActionIcon variant="light" color="blue" onClick={() => setModal({ id: item.id, mode: 'UPDATE' })}>
+              <Pencil />
+            </ActionIcon>
           </>
         )}
       />
+
+      <Modal onClose={() => setModal(initialValue)} title="Delete Translation" opened={modal.mode === 'DELETE'}>
+        <Delete id={modal.id} onCancel={() => setModal(initialValue)} />
+      </Modal>
+
+      <Modal
+        onClose={() => setModal(initialValue)}
+        title={modal.mode === 'CREATE' ? t('translation_create_title') : t('translation_update_title')}
+        opened={modal.mode === 'CREATE' || modal.mode === 'UPDATE'}
+      >
+        {/** biome-ignore lint/style/noNonNullAssertion: <explanation> */}
+        {modal.mode === 'CREATE' ? <Create onCancel={onCancel} /> : <Update id={modal.id!} onCancel={onCancel} />}
+      </Modal>
     </div>
   );
 };

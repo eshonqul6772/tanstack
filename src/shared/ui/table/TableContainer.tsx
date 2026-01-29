@@ -1,87 +1,93 @@
-import { useMemo } from 'react';
-import { useNavigate, useRouterState } from '@tanstack/react-router';
+import { isValidElement, type ReactNode } from 'react';
+import { Table as MantineTable, Stack } from '@mantine/core';
 
 import type { PaginationParams } from '@/widgets/layout/components/Sidebar/menu';
 
-import Table, { type ColumnDef, type SortingState } from './Table';
+export interface ColumnDef<T> {
+  id?: string;
+  accessorKey?: keyof T | string;
+  header: ReactNode | ((props: any) => ReactNode);
+  cell?: (props: { row: { original: T } }) => ReactNode;
+  enableSorting?: boolean;
+  meta?: {
+    filterKey?: keyof T;
+    filterVariant?: 'number' | 'text';
+  };
+}
 
 interface Props<T extends Record<string, any>> {
   columns: ColumnDef<T>[];
   data: T[];
   rowCount: number;
   pagination: PaginationParams;
-  defaultSort?: string;
 }
 
-const TableContainer = <T extends Record<string, any>>({
-  columns,
-  data,
-  rowCount,
-  pagination,
-  defaultSort
-}: Props<T>) => {
-  const search = useRouterState({ select: state => state.location.search }) as unknown as Record<string, unknown>;
-  const navigate = useNavigate();
-
-  const sortParam = (typeof search.sort === 'string' ? search.sort : '') || defaultSort || '';
-  const sorting = useMemo<SortingState[]>(
-    () =>
-      sortParam
-        ? [
-            {
-              id: sortParam.startsWith('-') ? sortParam.slice(1) : sortParam,
-              desc: sortParam.startsWith('-')
-            }
-          ]
-        : [],
-    [sortParam]
-  );
-
-  const updateSearch = (updates: Record<string, unknown>) => {
-    navigate({
-      search: ((prev: Record<string, unknown> | undefined) => {
-        const prevSearch = (prev ?? {}) as Record<string, unknown>;
-        const next: Record<string, unknown> = { ...prevSearch };
-        Object.entries(updates).forEach(([key, value]) => {
-          if (value === undefined || value === null || value === '') {
-            delete next[key];
-          } else {
-            next[key] = value;
-          }
-        });
-        return next;
-      }) as any
-    }).then(r => r);
+const TableContainer = <T extends Record<string, any>>({ columns, data }: Props<T>) => {
+  const getNestedValue = (obj: any, path: string) => {
+    return path.split('.').reduce((acc, part) => acc?.[part], obj);
   };
 
-  const handlePaginationChange = (next: PaginationParams) => {
-    updateSearch({
-      page: next.pageIndex + 1,
-      perPage: next.pageSize
-    });
+  const renderHeader = (column: ColumnDef<T>) => {
+    if (typeof column.header === 'function') {
+      return column.header({});
+    }
+    return column.header;
   };
 
-  const handleSortingChange = (nextSorting: SortingState[]) => {
-    const sortValue = nextSorting.length > 0 ? `${nextSorting[0].desc ? '-' : ''}${nextSorting[0].id}` : undefined;
-
-    updateSearch({
-      sort: sortValue,
-      page: 1
-    });
+  const renderCell = (column: ColumnDef<T>, row: T) => {
+    if (column.cell) {
+      return column.cell({ row: { original: row } });
+    }
+    const accessor = column.accessorKey as string;
+    const value = accessor ? getNestedValue(row, accessor) : null;
+    if (value === null || value === undefined || isValidElement(value)) return value;
+    if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') return value;
+    if (Array.isArray(value)) return value.join(', ');
+    if (typeof value === 'object') {
+      const multiName = value as Record<string, string>;
+      if (typeof multiName.uz === 'string' || typeof multiName.ru === 'string' || typeof multiName.en === 'string') {
+        return multiName.uz || multiName.ru || multiName.en || '';
+      }
+      try {
+        return JSON.stringify(value);
+      } catch {
+        return String(value);
+      }
+    }
+    return String(value);
   };
 
   return (
-    <Table
-      data={data}
-      columns={columns}
-      pagination={pagination}
-      onPaginationChange={handlePaginationChange}
-      rowCount={rowCount}
-      filters={{}}
-      onFilterChange={() => {}}
-      sorting={sorting}
-      onSortingChange={handleSortingChange}
-    />
+    <Stack gap="md">
+      <MantineTable striped highlightOnHover withTableBorder withColumnBorders>
+        <MantineTable.Thead>
+          <MantineTable.Tr>
+            {columns.map((column, index) => {
+              const key = column.id ?? (column.accessorKey as string) ?? String(index);
+              return <MantineTable.Th key={key}>{renderHeader(column)}</MantineTable.Th>;
+            })}
+          </MantineTable.Tr>
+        </MantineTable.Thead>
+        <MantineTable.Tbody>
+          {data.length > 0 ? (
+            data.map((row, rowIndex) => (
+              <MantineTable.Tr key={row.id || rowIndex}>
+                {columns.map((column, index) => {
+                  const key = column.id ?? (column.accessorKey as string) ?? String(index);
+                  return <MantineTable.Td key={key}>{renderCell(column, row)}</MantineTable.Td>;
+                })}
+              </MantineTable.Tr>
+            ))
+          ) : (
+            <MantineTable.Tr>
+              <MantineTable.Td colSpan={columns.length} align="center">
+                No data
+              </MantineTable.Td>
+            </MantineTable.Tr>
+          )}
+        </MantineTable.Tbody>
+      </MantineTable>
+    </Stack>
   );
 };
 

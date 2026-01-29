@@ -1,4 +1,4 @@
-import type { STATUS, CABINET_TYPE } from '@/shared/lib/utils/enums';
+import type { CABINET_TYPE, STATUS } from '@/shared/lib/utils/enums';
 import type { IMeta, IMultiName } from '@/shared/lib/utils/interfaces';
 
 export declare namespace IApi {
@@ -17,7 +17,7 @@ export declare namespace IApi {
 
 export declare namespace IEntity {
   export interface Data extends IForm.Values {
-    id: string;
+    id: number;
   }
 }
 
@@ -32,7 +32,7 @@ export declare namespace IQuery {
   }
 
   export interface Delete {
-    id: string;
+    id: number | null;
   }
 }
 
