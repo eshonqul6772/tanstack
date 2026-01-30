@@ -30,18 +30,16 @@ const FormLanguageSwitcher: React.FC<IProps> = ({
   const form = useFormContext<any>();
   const errors = form?.errors;
 
-  const errorsCountByLanguage = languages.reduce<Record<string, number>>((prev, language) => {
+  const errorsCountByLanguage = languages.reduce<Record<string, number>>((acc, language) => {
     const count = fields.reduce((acc, field) => {
-      const path = `${field}[${language.value}]`;
+      const path = `${field}.${language.value}`;
       const hasError = Boolean(get(errors, path));
       const isTouched = form?.isTouched ? form.isTouched(path) : false;
       return acc + Number(hasError && isTouched);
     }, 0);
 
-    return {
-      ...prev,
-      [language.value]: count
-    };
+    acc[language.value] = count;
+    return acc;
   }, {});
 
   return (

@@ -1,7 +1,7 @@
 import type React from 'react';
 import { useEffect } from 'react';
-import { useForm } from '@mantine/form';
 import { useMutation } from '@tanstack/react-query';
+import { useForm } from '@mantine/form';
 
 import { FormProvider } from '@/shared/ui/fields';
 

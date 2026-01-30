@@ -7,8 +7,6 @@ import * as AuthProviders from '@/features/auth/providers';
 
 import * as Providers from '@/app/providers';
 
-import 'tailwindcss';
-
 const rootElement = document.getElementById('root');
 
 if (!rootElement) {

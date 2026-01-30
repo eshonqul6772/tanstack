@@ -1,24 +1,21 @@
-import { Badge, Group } from '@mantine/core';
-import { STATUS_VARIANT } from '@/shared/lib/utils/enums';
 import type { ReactNode } from 'react';
+import { Badge, Group } from '@mantine/core';
+
+import { STATUS_VARIANT } from '@/shared/lib/utils/enums';
+import TableContainer, { type ColumnDef } from '@/shared/ui/table/TableContainer';
+
+import type { PaginationParams } from '@/widgets/layout/components/Sidebar/menu';
 
 import type { IEntity } from '../../model/types';
-import TableContainer, { type ColumnDef } from '@/shared/ui/table/TableContainer';
-import type { PaginationParams } from '@/widgets/layout/components/Sidebar/menu';
 
 interface Props {
   data: IEntity.User[];
   pagination: PaginationParams;
   rowCount: number;
-  renderActions: (user: IEntity.User) => ReactNode;
+  actions: (user: IEntity.User) => ReactNode;
 }
 
-export const UserTable = ({
-  data,
-  pagination,
-  rowCount,
-  renderActions
-}: Props) => {
+export const UserTable = ({ data, pagination, rowCount, actions }: Props) => {
   const columns: ColumnDef<IEntity.User>[] = [
     {
       accessorKey: 'firstName',
@@ -47,16 +44,9 @@ export const UserTable = ({
     {
       id: 'actions',
       header: 'Actions',
-      cell: ({ row }) => <Group gap="xs">{renderActions(row.original)}</Group>
+      cell: ({ row }) => <Group gap="xs">{actions(row.original)}</Group>
     }
   ];
 
-  return (
-    <TableContainer
-      data={data}
-      columns={columns}
-      pagination={pagination}
-      rowCount={rowCount}
-    />
-  );
+  return <TableContainer data={data} columns={columns} pagination={pagination} rowCount={rowCount} />;
 };

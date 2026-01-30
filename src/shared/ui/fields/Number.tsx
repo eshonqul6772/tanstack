@@ -1,6 +1,6 @@
+import { useTranslation } from 'react-i18next';
 import { NumberInput, type NumberInputProps } from '@mantine/core';
 import type { UseFormReturnType } from '@mantine/form';
-import { useTranslation } from 'react-i18next';
 
 import { useFormContext } from './FormProvider';
 import type { NumberFieldName } from './types';

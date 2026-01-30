@@ -1,12 +1,14 @@
-import { createRouter, RouterProvider as TanstackRouterProvider } from '@tanstack/react-router';
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import React from 'react';
+import { RouterProvider as TanstackRouterProvider, createRouter } from '@tanstack/react-router';
+import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
+
+import config from '@/shared/config';
+import type { PERMISSIONS } from '@/shared/lib/utils/enums';
+
+import { useAuth } from '@/features/auth/hooks/useAuth';
 
 import HttpInitializer from '@/app/init/HttpInitializer';
 import { routeTree } from '@/app/router/routeTree';
-import { useAuth } from '@/features/auth/hooks/useAuth';
-import config from '@/shared/config';
-import type { PERMISSIONS } from '@/shared/lib/utils/enums';
 
 const router = createRouter({
   routeTree,

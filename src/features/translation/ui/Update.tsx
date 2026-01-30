@@ -20,7 +20,7 @@ export const Update: React.FC<IProps> = ({ id, onCancel }) => {
           {form => (
             <>
               {form.submitting && <Loader color="blue" size="sm" />}
-              <Form />
+              <Form onCancel={onCancel} />
             </>
           )}
         </Forms.Update>

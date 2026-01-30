@@ -1,10 +1,12 @@
 import type React from 'react';
 import { useEffect, useRef } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from '@mantine/form';
-import { useMutation } from '@tanstack/react-query';
 import isEqual from 'lodash/isEqual';
 
 import { FormProvider } from '@/shared/ui/fields';
+
+import * as Constants from '@/entities/translation/model/constants.ts';
 
 import * as Api from '../api/api';
 import * as Mappers from '../model/mappers';
@@ -22,6 +24,8 @@ interface IProps {
 }
 
 const Update: React.FC<IProps> = ({ id, values, onSuccess, onError, children }) => {
+  const queryClient = useQueryClient();
+
   const form = useForm<IFormValues>({
     initialValues: values,
 
@@ -52,7 +56,12 @@ const Update: React.FC<IProps> = ({ id, values, onSuccess, onError, children }) 
       const { data } = await Api.Update({ id, values });
       return Mappers.getData(data.data);
     },
-    onSuccess,
+    onSuccess: async data => {
+      await queryClient.invalidateQueries({
+        predicate: query => query.queryKey[0] === Constants.ENTITY && query.queryKey[1] === 'list'
+      });
+      onSuccess?.(data);
+    },
     onError
   });
 

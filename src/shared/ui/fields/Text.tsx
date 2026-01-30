@@ -1,7 +1,7 @@
+import { useTranslation } from 'react-i18next';
 import { TextInput, type TextInputProps } from '@mantine/core';
 import type { UseFormReturnType } from '@mantine/form';
 import get from 'lodash/get';
-import { useTranslation } from 'react-i18next';
 
 import { useFormContext } from './FormProvider';
 import type { StringFieldName } from './types';
@@ -20,7 +20,7 @@ interface IProps<T extends Record<string, any>> extends Omit<TextInputProps, 'va
 const Text = <T extends Record<string, any>>({ name, form, validation, onChange, ...props }: IProps<T>) => {
   const { t } = useTranslation();
   const contextForm = useFormContext<T>();
-  const currentForm = form ?? contextForm;
+  const currentForm: any = form ?? contextForm;
   if (!currentForm) {
     throw new Error('Text field must be used inside FormProvider or receive form prop.');
   }
@@ -45,7 +45,6 @@ const Text = <T extends Record<string, any>>({ name, form, validation, onChange,
       placeholder={props.placeholder || t('field_enter')}
       onChange={event => {
         const value = event.currentTarget.value;
-        // @ts-expect-error
         currentForm.setFieldValue(name, value);
         if (validation) currentForm.setFieldError(name, null);
         onChange?.(value);
@@ -58,7 +57,6 @@ const Text = <T extends Record<string, any>>({ name, form, validation, onChange,
           if (validation.required && !nextValue) error = 'Required';
           else if (validation.min !== undefined && nextValue.length < validation.min) error = `Min ${validation.min}`;
           else if (validation.max !== undefined && nextValue.length > validation.max) error = `Max ${validation.max}`;
-          // @ts-expect-error
           currentForm.setFieldError(name, error);
         } else {
           currentForm.validateField(name);

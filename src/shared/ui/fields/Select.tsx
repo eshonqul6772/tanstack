@@ -1,7 +1,6 @@
-import type React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Select as MantineSelect, type SelectProps } from '@mantine/core';
 import type { UseFormReturnType } from '@mantine/form';
-import { useTranslation } from 'react-i18next';
 
 import { useFormContext } from './FormProvider';
 
@@ -14,13 +13,7 @@ interface IProps<T> extends Omit<SelectProps, 'value' | 'onChange' | 'form'> {
   };
 }
 
-const Select = <T,>({
-  name,
-  form,
-  validation,
-  onChange,
-  ...props
-}: IProps<T>) => {
+const Select = <T,>({ name, form, validation, onChange, ...props }: IProps<T>) => {
   const { t } = useTranslation();
   const contextForm = useFormContext<T>();
   const currentForm = form ?? contextForm;
@@ -38,6 +31,7 @@ const Select = <T,>({
       error={currentForm.errors[name]}
       placeholder={props.placeholder || t('field_select')}
       onChange={value => {
+        // @ts-expect-error
         currentForm.setFieldValue(name, value);
         onChange?.(value);
       }}

@@ -1,7 +1,6 @@
 const ENV = import.meta.env;
 
-// API Base URL - environment o'zgaruvchilardan
-const API_BASE_URL = ENV.VITE_API_BASE_URL || 'https://hudud.adliya.uz/api/v1';
+const API_BASE_URL = ENV.VITE_API_BASE_URL;
 const APP_ENV = ENV.VITE_APP_ENV || 'development';
 const APP_DEBUG = ENV.VITE_APP_DEBUG === 'true';
 const LOG_LEVEL = ENV.VITE_APP_LOG_LEVEL || 'info';
@@ -24,7 +23,8 @@ const config = {
     list: ['uz', 'ru', 'en']
   },
   list: {
-    perPage: 10
+    perPage: 5,
+    pageSize: [5, 10, 20, 50]
   }
 };
 

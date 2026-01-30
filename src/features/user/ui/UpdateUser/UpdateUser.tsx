@@ -1,7 +1,7 @@
-import { ActionIcon, Loader, Modal } from '@mantine/core';
 import { useState } from 'react';
+import { ActionIcon, Loader, Modal } from '@mantine/core';
 
-import { UserForm, type IEntity, type IForm, useSingle } from '@/entities/user';
+import { type IEntity, type IForm, UserForm, useSingle } from '@/entities/user';
 import * as Forms from '@/entities/user/forms';
 
 interface Props {

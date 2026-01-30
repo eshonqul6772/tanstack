@@ -1,11 +1,12 @@
 import type React from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from '@mantine/form';
-import { useMutation } from '@tanstack/react-query';
 
 import { CABINET_TYPE, STATUS } from '@/shared/lib/utils/enums.ts';
 import { FormProvider } from '@/shared/ui/fields';
 
 import * as Api from '../api/api';
+import * as Constants from '../model/constants';
 import * as Mappers from '../model/mappers';
 import type * as Types from '../model/types';
 
@@ -19,6 +20,8 @@ interface IProps {
 }
 
 const Create: React.FC<IProps> = ({ onSuccess, onError, children }) => {
+  const queryClient = useQueryClient();
+
   const form = useForm<IFormValues>({
     initialValues: {
       name: {
@@ -48,7 +51,12 @@ const Create: React.FC<IProps> = ({ onSuccess, onError, children }) => {
       const { data } = await Api.Create({ values });
       return Mappers.getData(data.data);
     },
-    onSuccess,
+    onSuccess: async data => {
+      await queryClient.invalidateQueries({
+        predicate: query => query.queryKey[0] === Constants.ENTITY && query.queryKey[1] === 'list'
+      });
+      onSuccess?.(data);
+    },
     onError
   });
 

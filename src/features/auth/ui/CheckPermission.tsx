@@ -1,7 +1,10 @@
 import type React from 'react';
-import * as Hooks from '@/features/auth/hooks/useAuth';
-import NoAccess from '@/pages/NoAccess';
+
 import type { PERMISSIONS } from '@/shared/lib/utils/enums';
+
+import * as Hooks from '@/features/auth/hooks/useAuth';
+
+import NoAccess from '@/pages/NoAccess';
 
 interface IProps {
   permission: PERMISSIONS;

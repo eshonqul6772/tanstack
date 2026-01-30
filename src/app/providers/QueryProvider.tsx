@@ -1,10 +1,9 @@
+import type * as React from 'react';
 import * as ReactQuery from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { get } from 'lodash';
-import type * as React from 'react';
 
 import config from '@/shared/config';
-
 import { MESSAGE_TYPE } from '@/shared/lib/utils/enums';
 
 const queryResponseHandler = (data: unknown) => {

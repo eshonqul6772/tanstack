@@ -40,6 +40,16 @@ export const allRoutes = [
       requiresAuth: true,
       requiredPermissions: ['VIEW_USERS'] as PERMISSIONS[]
     }
+  },
+  {
+    key: 'roles',
+    path: '/roles',
+    component: () => import('@/pages/Role'),
+    metadata: {
+      title: 'Roles',
+      requiresAuth: true,
+      requiredPermissions: ['VIEW_ROLE'] as PERMISSIONS[]
+    }
   }
 ] as const;
 

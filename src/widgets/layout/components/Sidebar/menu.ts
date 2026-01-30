@@ -35,6 +35,7 @@ export const MENU_SECTIONS: MenuSection[] = [
     items: [
       { label: 'Ecommerce', path: '/dashboard', icon: '🛍', permission: ['VIEW_USERS'] },
       { label: 'Users', path: '/users', icon: '👤', permission: ['VIEW_USERS'] },
+      { label: 'Roles', path: '/roles', icon: '👤', permission: ['VIEW_ROLES'] },
       { label: 'Translations', path: '/translations', icon: '🌐', permission: ['VIEW_USERS'] }
     ]
   }

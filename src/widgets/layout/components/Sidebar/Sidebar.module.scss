@@ -65,6 +65,16 @@
   margin: 0;
 }
 
+.navLink {
+  border-radius: var(--mantine-radius-md);
+}
+
+.navLink[data-active] {
+  background-color: var(--mantine-colors-blue-0);
+  color: var(--mantine-colors-blue-6);
+  font-weight: 500;
+}
+
 .hoverBg {
   &:hover {
     background-color: #f8f9fa;

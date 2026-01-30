@@ -1,5 +1,4 @@
 import type React from 'react';
-import { useMemo } from 'react';
 import { useRouterState } from '@tanstack/react-router';
 
 import config from '@/shared/config';
@@ -14,24 +13,16 @@ const UserPage: React.FC = () => {
   const search = useRouterState({ select: state => state.location.search }) as unknown as Record<string, unknown>;
   const page = Math.max(1, Number(search.page || 1));
   const perPage = Math.max(1, Number(search.perPage || config.list.perPage));
-  const sortParam = useMemo(() => (typeof search.sort === 'string' ? search.sort : ''), [search.sort]);
+
   const pagination: PaginationParams = {
     pageIndex: page - 1,
     pageSize: perPage
   };
 
-  const sort = sortParam
-    ? {
-        name: sortParam.startsWith('-') ? sortParam.slice(1) : sortParam,
-        direction: sortParam.startsWith('-') ? 'desc' : 'asc'
-      }
-    : undefined;
-
   const { items, meta, refetch } = useList({
     params: {
       page,
-      perPage,
-      sort
+      perPage
     }
   });
 
@@ -50,7 +41,7 @@ const UserPage: React.FC = () => {
         data={items}
         pagination={pagination}
         rowCount={meta.totalItems}
-        renderActions={user => (
+        actions={user => (
           <>
             <UpdateUserFeature id={user.id} onSuccess={handleUpdateSuccess} />
             <DeleteUserFeature id={user.id} onSuccess={() => refetch().then((r: any) => r)} />

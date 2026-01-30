@@ -1,9 +1,9 @@
-import { Outlet } from '@tanstack/react-router';
-import { Box, Stack, Paper } from '@mantine/core';
 import { Suspense, useState } from 'react';
+import { Outlet } from '@tanstack/react-router';
+import { Box, Paper, Stack } from '@mantine/core';
 
-import Header from './components/Header';
 import Footer from './components/Footer';
+import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 
 const Main = () => {

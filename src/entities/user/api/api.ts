@@ -1,6 +1,8 @@
 import type { AxiosPromise } from 'axios';
+
 import { http } from '@/shared/api';
 import type { IParams } from '@/shared/lib/utils/interfaces';
+
 import type * as Types from '../model/types';
 
 export const List = ({ params }: { params: IParams }): AxiosPromise<Types.IApi.List.Response> =>

@@ -1,5 +1,5 @@
-import { ActionIcon, Button, Group, Modal, Text } from '@mantine/core';
 import { useState } from 'react';
+import { ActionIcon, Button, Group, Modal, Text } from '@mantine/core';
 
 import { useDelete } from '@/entities/user';
 

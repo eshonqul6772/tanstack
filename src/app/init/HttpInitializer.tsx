@@ -1,12 +1,14 @@
 import '@/shared/assets/style/main.scss';
 
 import React from 'react';
-import { useAuth } from '@/features/auth/hooks/useAuth';
+
 import { http } from '@/shared/api';
 import { setAuthHandlers } from '@/shared/api/http';
 import config from '@/shared/config';
 import * as i18n from '@/shared/lib/i18n';
 import storage from '@/shared/lib/storage';
+
+import { useAuth } from '@/features/auth/hooks/useAuth';
 
 let initialized = false;
 
@@ -33,7 +35,7 @@ const HttpInitializer = () => {
       currentLanguage: storage.local.get(config.language.key),
       initialLanguage: config.language.initial,
       backend: {
-        loadPath: `http://localhost:4445/api/v1/references/translations/ADMIN_CABINET/uz`
+        loadPath: `http://localhost:4445/api/v1/admin/references/translations/ADMIN_CABINET/uz`
       },
       onChange: language => storage.local.set('language', language)
     });
@@ -46,7 +48,7 @@ const HttpInitializer = () => {
     http.init({
       baseURL: config.api.baseUrl
     });
-  }, [auth]);
+  }, []);
 
   return null;
 };

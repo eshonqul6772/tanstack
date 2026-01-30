@@ -38,5 +38,5 @@ export const Update = ({
     status: values.status
   });
 
-export const Delete = ({ id }: { id: number }): AxiosPromise<Types.IApi.Single.Response> =>
+export const Delete = ({ id }: { id: number | null }): AxiosPromise<Types.IApi.Single.Response> =>
   http.delete(`/admin/translations/${id}`);

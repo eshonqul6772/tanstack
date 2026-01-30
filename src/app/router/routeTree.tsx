@@ -1,10 +1,13 @@
-import { createRootRouteWithContext, createRoute, Outlet, redirect } from '@tanstack/react-router';
 import { lazy } from 'react';
+import { Outlet, createRootRouteWithContext, createRoute, redirect } from '@tanstack/react-router';
+
 import type { PERMISSIONS } from '@/shared/lib/utils/enums';
 import ErrorComponent from '@/shared/ui/ErrorComponent';
 import Loading from '@/shared/ui/Loading';
-import MainLayout from '@/widgets/layout';
+
 import NotFound from '@/pages/NotFound';
+
+import MainLayout from '@/widgets/layout';
 
 import { allRoutes } from './routes';
 

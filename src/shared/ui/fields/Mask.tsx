@@ -1,7 +1,7 @@
-import { TextInput, type TextInputProps } from '@mantine/core';
-import type { UseFormReturnType } from '@mantine/form';
 import { useTranslation } from 'react-i18next';
 import InputMask from 'react-input-mask';
+import { TextInput, type TextInputProps } from '@mantine/core';
+import type { UseFormReturnType } from '@mantine/form';
 
 import { useFormContext } from './FormProvider';
 import type { StringFieldName } from './types';

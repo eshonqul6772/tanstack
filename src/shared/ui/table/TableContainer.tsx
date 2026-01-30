@@ -1,4 +1,4 @@
-import { isValidElement, type ReactNode } from 'react';
+import { type ReactNode, isValidElement } from 'react';
 import { Table as MantineTable, Stack } from '@mantine/core';
 
 import type { PaginationParams } from '@/widgets/layout/components/Sidebar/menu';
@@ -12,6 +12,9 @@ export interface ColumnDef<T> {
   meta?: {
     filterKey?: keyof T;
     filterVariant?: 'number' | 'text';
+    sticky?: 'left' | 'right';
+    width?: number | string;
+    align?: 'left' | 'center' | 'right';
   };
 }
 
@@ -57,36 +60,68 @@ const TableContainer = <T extends Record<string, any>>({ columns, data }: Props<
     return String(value);
   };
 
+  const getStickyStyles = (column: ColumnDef<T>) => {
+    if (!column.meta?.sticky) {
+      return {
+        width: column.meta?.width,
+        minWidth: column.meta?.width,
+        textAlign: column.meta?.align
+      };
+    }
+    const side = column.meta.sticky;
+    return {
+      position: 'sticky' as const,
+      [side]: 0,
+      zIndex: 2,
+      background: 'var(--mantine-color-body)',
+      width: column.meta.width,
+      minWidth: column.meta.width,
+      textAlign: column.meta.align,
+      boxShadow:
+        side === 'right' ? 'inset 1px 0 0 var(--mantine-color-gray-3)' : 'inset -1px 0 0 var(--mantine-color-gray-3)'
+    };
+  };
+
   return (
     <Stack gap="md">
-      <MantineTable striped highlightOnHover withTableBorder withColumnBorders>
-        <MantineTable.Thead>
-          <MantineTable.Tr>
-            {columns.map((column, index) => {
-              const key = column.id ?? (column.accessorKey as string) ?? String(index);
-              return <MantineTable.Th key={key}>{renderHeader(column)}</MantineTable.Th>;
-            })}
-          </MantineTable.Tr>
-        </MantineTable.Thead>
-        <MantineTable.Tbody>
-          {data.length > 0 ? (
-            data.map((row, rowIndex) => (
-              <MantineTable.Tr key={row.id || rowIndex}>
-                {columns.map((column, index) => {
-                  const key = column.id ?? (column.accessorKey as string) ?? String(index);
-                  return <MantineTable.Td key={key}>{renderCell(column, row)}</MantineTable.Td>;
-                })}
-              </MantineTable.Tr>
-            ))
-          ) : (
+      <div style={{ overflowX: 'auto' }}>
+        <MantineTable striped highlightOnHover withTableBorder withColumnBorders>
+          <MantineTable.Thead>
             <MantineTable.Tr>
-              <MantineTable.Td colSpan={columns.length} align="center">
-                No data
-              </MantineTable.Td>
+              {columns.map((column, index) => {
+                const key = column.id ?? (column.accessorKey as string) ?? String(index);
+                return (
+                  <MantineTable.Th key={key} style={getStickyStyles(column)}>
+                    {renderHeader(column)}
+                  </MantineTable.Th>
+                );
+              })}
             </MantineTable.Tr>
-          )}
-        </MantineTable.Tbody>
-      </MantineTable>
+          </MantineTable.Thead>
+          <MantineTable.Tbody>
+            {data.length > 0 ? (
+              data.map((row, rowIndex) => (
+                <MantineTable.Tr key={row.id || rowIndex}>
+                  {columns.map((column, index) => {
+                    const key = column.id ?? (column.accessorKey as string) ?? String(index);
+                    return (
+                      <MantineTable.Td key={key} style={getStickyStyles(column)}>
+                        {renderCell(column, row)}
+                      </MantineTable.Td>
+                    );
+                  })}
+                </MantineTable.Tr>
+              ))
+            ) : (
+              <MantineTable.Tr>
+                <MantineTable.Td colSpan={columns.length} align="center">
+                  No data
+                </MantineTable.Td>
+              </MantineTable.Tr>
+            )}
+          </MantineTable.Tbody>
+        </MantineTable>
+      </div>
     </Stack>
   );
 };

@@ -1,11 +1,12 @@
 import type React from 'react';
 import { useState } from 'react';
-import { ActionIcon, Button, Modal } from '@mantine/core';
-import { useRouterState } from '@tanstack/react-router';
-import { Pencil, Trash2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useRouterState } from '@tanstack/react-router';
+import { ActionIcon, Button, Modal, Space } from '@mantine/core';
+import { Pencil, Trash2 } from 'lucide-react';
 
 import config from '@/shared/config';
+import Pagination from '@/shared/ui/Pagination';
 
 import { Create, Delete, Update } from '@/features/translation';
 
@@ -59,7 +60,7 @@ const TranslationPage: React.FC = () => {
         data={items}
         pagination={pagination}
         rowCount={meta.totalItems}
-        renderActions={item => (
+        actions={item => (
           <>
             <ActionIcon variant="light" color="red" onClick={() => setModal({ id: item.id, mode: 'DELETE' })}>
               <Trash2 />
@@ -71,17 +72,26 @@ const TranslationPage: React.FC = () => {
         )}
       />
 
-      <Modal onClose={() => setModal(initialValue)} title="Delete Translation" opened={modal.mode === 'DELETE'}>
+      <Space h="md" />
+
+      <Pagination total={meta.totalItems} current={meta.current} pageSize={meta.perPage} />
+
+      <Modal
+        onClose={() => setModal(initialValue)}
+        title={t('translation_delete_title')}
+        opened={modal.mode === 'DELETE'}
+      >
         <Delete id={modal.id} onCancel={() => setModal(initialValue)} />
       </Modal>
 
       <Modal
+        size="50%"
         onClose={() => setModal(initialValue)}
         title={modal.mode === 'CREATE' ? t('translation_create_title') : t('translation_update_title')}
         opened={modal.mode === 'CREATE' || modal.mode === 'UPDATE'}
       >
-        {/** biome-ignore lint/style/noNonNullAssertion: <explanation> */}
-        {modal.mode === 'CREATE' ? <Create onCancel={onCancel} /> : <Update id={modal.id!} onCancel={onCancel} />}
+        {modal.mode === 'CREATE' && <Create onCancel={onCancel} />}
+        {modal.mode === 'UPDATE' && modal.id != null && <Update id={modal.id} onCancel={onCancel} />}
       </Modal>
     </div>
   );

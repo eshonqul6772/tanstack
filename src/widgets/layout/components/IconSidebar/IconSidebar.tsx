@@ -1,5 +1,5 @@
-import { Link, useLocation } from '@tanstack/react-router';
 import type React from 'react';
+import { Link, useLocation } from '@tanstack/react-router';
 
 interface IconSidebarItem {
   icon: string;

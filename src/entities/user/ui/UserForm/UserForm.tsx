@@ -1,7 +1,8 @@
 import { Button } from '@mantine/core';
+
 import { STATUS } from '@/shared/lib/utils/enums';
-import Text from '@/shared/ui/fields/Text';
 import Select from '@/shared/ui/fields/Select';
+import Text from '@/shared/ui/fields/Text';
 
 export const UserForm = () => (
   <>

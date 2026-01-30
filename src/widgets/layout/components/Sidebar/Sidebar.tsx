@@ -1,9 +1,11 @@
-import { Link, useLocation } from '@tanstack/react-router';
-import { ActionIcon, Box, Collapse, Group, NavLink, Stack, Text, Title, rem } from '@mantine/core';
-import { IconChevronDown } from '@tabler/icons-react';
 import type React from 'react';
 import { useState } from 'react';
+import { Link, useLocation } from '@tanstack/react-router';
+import { ActionIcon, Box, Collapse, Group, NavLink, Stack, Text, Title, rem } from '@mantine/core';
+import { ChevronRight } from 'lucide-react';
+
 import { useAuth } from '@/features/auth/hooks/useAuth';
+
 import { DEFAULT_EXPANDED_SECTIONS, MENU_SECTIONS, type MenuItem } from './menu';
 import styles from './Sidebar.module.scss';
 
@@ -40,16 +42,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpenMenu }) => {
           leftSection={<span style={{ fontSize: rem(18) }}>{item.icon}</span>}
           active={isActive(item.path)}
           title={!isOpenMenu ? item.label : ''}
-          styles={{
-            root: {
-              borderRadius: 'var(--mantine-radius-md)',
-              '&[data-active]': {
-                backgroundColor: 'var(--mantine-colors-blue-0)',
-                color: 'var(--mantine-colors-blue-6)',
-                fontWeight: 500
-              }
-            }
-          }}
+          classNames={{ root: styles.navLink }}
         />
       ))}
     </Stack>
@@ -77,7 +70,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpenMenu }) => {
                 borderRadius: 'var(--mantine-radius-md)',
                 userSelect: 'none'
               }}
-              className="hover-bg"
+              className={styles.hoverBg}
             >
               {!isOpenMenu && (
                 <ActionIcon variant="subtle" size="lg" radius="md" title={section.label}>
@@ -92,7 +85,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpenMenu }) => {
                       {section.label}
                     </Text>
                   </Group>
-                  <IconChevronDown
+                  <ChevronRight
                     size={18}
                     style={{
                       transition: 'transform 300ms ease-in-out',

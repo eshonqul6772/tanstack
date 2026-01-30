@@ -1,8 +1,8 @@
 import type React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box, Button, Container, Group, Stack, Text, Title, Center } from '@mantine/core';
-import { IconArrowLeft, IconError404 } from '@tabler/icons-react';
 import { useNavigate } from '@tanstack/react-router';
+import { Box, Button, Center, Container, Group, Stack, Text, Title } from '@mantine/core';
+import { ArrowLeft, Bug } from 'lucide-react';
 
 const NotFound: React.FC = () => {
   const { t } = useTranslation();
@@ -14,7 +14,7 @@ const NotFound: React.FC = () => {
         <Stack gap="lg" align="center">
           {/* Icon */}
           <Box style={{ fontSize: 120, opacity: 0.7 }}>
-            <IconError404 size={120} color="var(--mantine-colors-blue-6)" />
+            <Bug size={120} color="var(--mantine-colors-blue-6)" />
           </Box>
 
           {/* Title */}
@@ -33,7 +33,7 @@ const NotFound: React.FC = () => {
               size="md"
               variant="light"
               color="blue"
-              leftSection={<IconArrowLeft size={18} />}
+              leftSection={<ArrowLeft size={18} />}
               onClick={() => navigate({ to: '/dashboard' })}
             >
               {t('back_to_dashboard') || 'Dashboard'}

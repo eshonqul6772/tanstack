@@ -17,7 +17,10 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true
+      "recommended": true,
+      "suspicious": {
+        "noExplicitAny": "off"
+      }
     }
   },
   "javascript": {
@@ -40,7 +43,8 @@
             "groups": [
               [":NODE:"],
               ":BLANK_LINE:",
-              ["react", "react/**"],
+              ["react", "react/**", "react-*"],
+              "@tanstack/**",
               [":PACKAGE:"],
               ":BLANK_LINE:",
               ["@/shared", "@/shared/**"],
