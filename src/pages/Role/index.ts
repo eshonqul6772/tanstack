@@ -1,3 +1,3 @@
-import RolePage from './Role.tsx';
+import RolePage from './ui/Role.tsx';
 
 export default RolePage;

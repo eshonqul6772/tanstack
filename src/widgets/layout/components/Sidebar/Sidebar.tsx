@@ -2,7 +2,7 @@ import type React from 'react';
 import { useState } from 'react';
 import { Link, useLocation } from '@tanstack/react-router';
 import { ActionIcon, Box, Collapse, Group, NavLink, Stack, Text, Title, rem } from '@mantine/core';
-import { ChevronRight } from 'lucide-react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 import { useAuth } from '@/features/auth/hooks/useAuth';
 
@@ -85,13 +85,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpenMenu }) => {
                       {section.label}
                     </Text>
                   </Group>
-                  <ChevronRight
-                    size={18}
-                    style={{
-                      transition: 'transform 300ms ease-in-out',
-                      transform: expandedSections.includes(section.id) ? 'rotate(180deg)' : 'rotate(0deg)'
-                    }}
-                  />
+                  {expandedSections.includes(section.id) ? <ChevronUp /> : <ChevronDown />}
                 </>
               )}
             </Group>

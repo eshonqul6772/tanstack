@@ -11,9 +11,9 @@ import type * as Types from '../model/types';
 export type IFormValues = Types.IForm.Values;
 
 interface IProps {
-  id: string;
+  id: number;
   values: Types.IForm.Values;
-  onSuccess?: (data: Types.IEntity.User) => void;
+  onSuccess?: (data: Types.IEntity.Data) => void;
   onError?: (error: string) => void;
 
   children(form: ReturnType<typeof useForm<IFormValues>>): React.JSX.Element;
@@ -21,7 +21,18 @@ interface IProps {
 
 const Update: React.FC<IProps> = ({ id, values, onSuccess, onError, children }) => {
   const form = useForm<IFormValues>({
-    initialValues: values
+    initialValues: values,
+
+    validate: {
+      firstName: value => (!value ? 'Required' : null),
+      lastName: value => (!value ? 'Required' : null),
+      username: value => (!value ? 'Required' : null),
+      password: value => (!value ? 'Required' : null),
+      phone: value => (!value ? 'Required' : null),
+      status: value => (!value ? 'Required' : null),
+      roleId: value => (!value ? 'Required' : null),
+      photoId: value => (!value ? 'Required' : null)
+    }
   });
 
   useEffect(() => {
@@ -30,7 +41,7 @@ const Update: React.FC<IProps> = ({ id, values, onSuccess, onError, children }) 
     form.resetDirty(values);
   }, [values, form]);
 
-  const mutation = useMutation<Types.IEntity.User, string, IFormValues>({
+  const mutation = useMutation<Types.IEntity.Data, string, IFormValues>({
     mutationFn: async payload => {
       const { data } = await Api.Update({ id, values: payload });
       return data.data;

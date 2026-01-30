@@ -5,13 +5,14 @@ import * as Constants from '../model/constants';
 import type * as Types from '../model/types';
 
 interface IProps {
-  id?: string;
+  id?: number;
 }
 
 export const useSingle = ({ id }: IProps) => {
   const { data, ...args } = useQuery<Types.IEntity.User>({
     queryKey: [Constants.ENTITY, 'single', id],
     queryFn: async () => {
+      // @ts-expect-error
       const { data } = await Api.Single({ id: id ?? '' });
       return data.data;
     },

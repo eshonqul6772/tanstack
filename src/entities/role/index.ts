@@ -1,6 +1,7 @@
 export * from '@/entities/role/hooks/useDelete';
 export * from '@/entities/role/hooks/useList';
 export * from '@/entities/role/hooks/usePermission';
+export * from '@/entities/role/hooks/useSelect';
 export * from '@/entities/role/hooks/useSingle';
 
 export * from './api/api';

@@ -1,37 +1,37 @@
 import { useTranslation } from 'react-i18next';
-import { Select as MantineSelect, type SelectProps } from '@mantine/core';
+import { MultiSelect as MantineMultiSelect, type MultiSelectProps } from '@mantine/core';
 import type { UseFormReturnType } from '@mantine/form';
 import get from 'lodash/get';
 
 import useValidatedField, { type ValidationRules } from './utils/useValidatedField.ts';
 
-interface IProps<T> extends Omit<SelectProps, 'value' | 'onChange' | 'form'> {
+interface IProps<T> extends Omit<MultiSelectProps, 'value' | 'onChange' | 'form'> {
   name: keyof T & string;
   form?: UseFormReturnType<T>;
-  onChange?: (value: string | null) => void;
+  onChange?: (value: string[]) => void;
   validation?: ValidationRules;
 }
 
-const Select = <T,>({ name, form, validation, onChange, ...props }: IProps<T>) => {
+const MultiSelect = <T,>({ name, form, validation, onChange, ...props }: IProps<T>) => {
   const { t } = useTranslation();
   const {
     currentForm,
     value: selectValue,
     error,
     handleBlur
-  } = useValidatedField<T, string | null>({
+  } = useValidatedField<T, string[]>({
     name,
     form,
     validation,
-    fieldLabel: 'Select',
+    fieldLabel: 'MultiSelect',
     getValue: formState => {
       const rawValue = get(formState.values, name);
-      return rawValue === undefined || rawValue === null ? null : String(rawValue);
+      return Array.isArray(rawValue) ? rawValue.map(item => String(item)) : [];
     }
   });
 
   return (
-    <MantineSelect
+    <MantineMultiSelect
       {...props}
       value={selectValue}
       error={error}
@@ -47,4 +47,4 @@ const Select = <T,>({ name, form, validation, onChange, ...props }: IProps<T>) =
   );
 };
 
-export default Select;
+export default MultiSelect;

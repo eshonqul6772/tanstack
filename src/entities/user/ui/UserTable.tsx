@@ -1,12 +1,12 @@
 import type { ReactNode } from 'react';
 import { Badge, Group } from '@mantine/core';
 
-import { STATUS_VARIANT } from '@/shared/lib/utils/enums';
-import TableContainer, { type ColumnDef } from '@/shared/ui/table/TableContainer';
+import { STATUS_VARIANT } from '@/shared/lib/utils/enums.ts';
+import TableContainer, { type ColumnDef } from '@/shared/ui/table/TableContainer.tsx';
 
-import type { PaginationParams } from '@/widgets/layout/components/Sidebar/menu';
+import type { IEntity } from '@/entities/user';
 
-import type { IEntity } from '../../model/types';
+import type { PaginationParams } from '@/widgets/layout/components/Sidebar/menu.ts';
 
 interface Props {
   data: IEntity.User[];
@@ -15,7 +15,7 @@ interface Props {
   actions: (user: IEntity.User) => ReactNode;
 }
 
-export const UserTable = ({ data, pagination, rowCount, actions }: Props) => {
+export const ListPaging = ({ data, pagination, rowCount, actions }: Props) => {
   const columns: ColumnDef<IEntity.User>[] = [
     {
       accessorKey: 'firstName',

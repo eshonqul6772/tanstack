@@ -3,8 +3,8 @@ import InputMask from 'react-input-mask';
 import { TextInput, type TextInputProps } from '@mantine/core';
 import type { UseFormReturnType } from '@mantine/form';
 
-import { useFormContext } from './FormProvider';
-import type { StringFieldName } from './types';
+import type { StringFieldName } from './utils/types.ts';
+import useFieldForm from './utils/useFieldForm.ts';
 
 interface IProps<T extends Record<string, any>> extends Omit<TextInputProps, 'value' | 'onChange' | 'form'> {
   name: StringFieldName<T>;
@@ -31,11 +31,7 @@ const Mask = <T extends Record<string, any>>({
   ...props
 }: IProps<T>) => {
   const { t } = useTranslation();
-  const contextForm = useFormContext<T>();
-  const currentForm = form ?? contextForm;
-  if (!currentForm) {
-    throw new Error('Mask field must be used inside FormProvider or receive form prop.');
-  }
+  const currentForm = useFieldForm<T>(form, 'Mask');
 
   const rawValue = currentForm.values[name];
   const inputValue = rawValue === undefined || rawValue === null ? '' : String(rawValue);

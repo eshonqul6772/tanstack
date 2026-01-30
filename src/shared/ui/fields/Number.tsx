@@ -1,44 +1,47 @@
 import { useTranslation } from 'react-i18next';
 import { NumberInput, type NumberInputProps } from '@mantine/core';
 import type { UseFormReturnType } from '@mantine/form';
+import get from 'lodash/get';
 
-import { useFormContext } from './FormProvider';
-import type { NumberFieldName } from './types';
+import type { NumberFieldName } from './utils/types.ts';
+import useValidatedField, { type ValidationRules } from './utils/useValidatedField.ts';
 
 interface IProps<T extends Record<string, any>> extends Omit<NumberInputProps, 'value' | 'onChange' | 'form'> {
   name: NumberFieldName<T>;
   form?: UseFormReturnType<T>;
   onChange?: (value: number | null) => void;
-  validation?: {
-    required?: boolean;
-    min?: number;
-    max?: number;
-  };
+  validation?: ValidationRules;
 }
 
 const NumberInputField = <T extends Record<string, any>>({ name, form, validation, onChange, ...props }: IProps<T>) => {
   const { t } = useTranslation();
-  const contextForm = useFormContext<T>();
-  const currentForm = form ?? contextForm;
-  if (!currentForm) {
-    throw new Error('Number field must be used inside FormProvider or receive form prop.');
-  }
-
-  const rawValue = currentForm.values[name];
-  const inputValue = rawValue === undefined || rawValue === null ? '' : Number(rawValue);
+  const { currentForm, value, error, handleBlur } = useValidatedField<T, number | null>({
+    name,
+    form,
+    validation,
+    fieldLabel: 'Number',
+    getValue: formState => {
+      const rawValue = get(formState.values, name);
+      if (rawValue === undefined || rawValue === null || rawValue === '') return null;
+      const numericValue = Number(rawValue);
+      return Number.isFinite(numericValue) ? numericValue : null;
+    }
+  });
+  const inputValue = value ?? '';
 
   return (
     <NumberInput
       {...props}
       value={inputValue}
-      error={currentForm.errors[name]}
+      error={error}
       placeholder={props.placeholder || t('field_enter')}
       onChange={value => {
         const nextValue = typeof value === 'number' && !Number.isNaN(value) ? value : null;
         currentForm.setFieldValue(name, nextValue as T[typeof name]);
+        if (validation) currentForm.setFieldError(name, null);
         onChange?.(nextValue);
       }}
-      onBlur={() => currentForm.validateField(name)}
+      onBlur={handleBlur}
     />
   );
 };

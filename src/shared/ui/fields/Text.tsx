@@ -1,10 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import { TextInput, type TextInputProps } from '@mantine/core';
 import type { UseFormReturnType } from '@mantine/form';
-import get from 'lodash/get';
 
-import { useFormContext } from './FormProvider';
-import type { StringFieldName } from './types';
+import type { StringFieldName } from './utils/types.ts';
+import useTextField from './utils/useTextField.ts';
 
 interface IProps<T extends Record<string, any>> extends Omit<TextInputProps, 'value' | 'onChange' | 'form'> {
   name: StringFieldName<T>;
@@ -19,49 +18,27 @@ interface IProps<T extends Record<string, any>> extends Omit<TextInputProps, 'va
 
 const Text = <T extends Record<string, any>>({ name, form, validation, onChange, ...props }: IProps<T>) => {
   const { t } = useTranslation();
-  const contextForm = useFormContext<T>();
-  const currentForm: any = form ?? contextForm;
-  if (!currentForm) {
-    throw new Error('Text field must be used inside FormProvider or receive form prop.');
-  }
-
-  const rawValue = get(currentForm.values, name);
-  const inputValue = rawValue === undefined || rawValue === null ? '' : String(rawValue);
-  const isTouched = currentForm.isTouched ? currentForm.isTouched(name) : false;
-  const shouldValidate = Boolean(validation) && (isTouched || Boolean(get(currentForm.errors, name)));
-  const validationError = (() => {
-    if (!validation || !shouldValidate) return null;
-    if (validation.required && !inputValue) return 'Required';
-    if (validation.min !== undefined && inputValue.length < validation.min) return `Min ${validation.min}`;
-    if (validation.max !== undefined && inputValue.length > validation.max) return `Max ${validation.max}`;
-    return null;
-  })();
+  const { currentForm, inputValue, error, handleBlur } = useTextField<T>({
+    name,
+    form,
+    validation,
+    fieldLabel: 'Text'
+  });
 
   return (
     <TextInput
       {...props}
       value={inputValue}
-      error={get(currentForm.errors, name) || validationError}
+      error={error}
       placeholder={props.placeholder || t('field_enter')}
       onChange={event => {
         const value = event.currentTarget.value;
+        // @ts-expect-error
         currentForm.setFieldValue(name, value);
         if (validation) currentForm.setFieldError(name, null);
         onChange?.(value);
       }}
-      onBlur={() => {
-        if (validation) {
-          currentForm.setFieldTouched(name, true);
-          const nextValue = String(get(currentForm.values, name) ?? '');
-          let error: string | null = null;
-          if (validation.required && !nextValue) error = 'Required';
-          else if (validation.min !== undefined && nextValue.length < validation.min) error = `Min ${validation.min}`;
-          else if (validation.max !== undefined && nextValue.length > validation.max) error = `Max ${validation.max}`;
-          currentForm.setFieldError(name, error);
-        } else {
-          currentForm.validateField(name);
-        }
-      }}
+      onBlur={handleBlur}
     />
   );
 };

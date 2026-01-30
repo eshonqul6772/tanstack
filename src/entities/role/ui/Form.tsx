@@ -8,7 +8,6 @@ import { usePermission } from '@/entities/role';
 
 export const Form = ({ onCancel }: { onCancel: () => void }) => {
   const { t } = useTranslation();
-
   const { items } = usePermission();
 
   return (

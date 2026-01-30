@@ -1,30 +1,42 @@
 import type { STATUS } from '@/shared/lib/utils/enums';
-import type { IFile, IIdAndName, IMeta } from '@/shared/lib/utils/interfaces';
+import type { IIdAndName, IMeta, IMinFile } from '@/shared/lib/utils/interfaces';
 
 export declare namespace IApi {
   export namespace List {
     export interface Response {
-      data: IEntity.User[];
-      meta: IMeta;
+      data: IEntity.Data[];
     }
   }
 
   export namespace Single {
     export interface Response {
-      data: IEntity.User;
+      data: IEntity.Data;
     }
   }
 }
 
 export declare namespace IEntity {
-  export interface User {
-    id: string;
-    firstName: string;
-    lastName: string;
-    username: string;
-    photo: IFile;
+  export interface Data extends Omit<IForm.Values, 'photoId' | 'roleId'> {
+    id: number | null;
+    photo: IMinFile;
     role: IIdAndName;
-    status: STATUS;
+    createdAt: string;
+    updatedAt: string;
+  }
+}
+
+export declare namespace IQuery {
+  export interface List {
+    items: IEntity.Data[];
+    meta: IMeta;
+  }
+
+  export interface Single {
+    item: IEntity.Data;
+  }
+
+  export interface Delete {
+    id: number | null;
   }
 }
 
@@ -32,25 +44,11 @@ export declare namespace IForm {
   export interface Values {
     firstName: string;
     lastName: string;
+    phone: string;
     username: string;
-    password?: string;
-    photoId?: number | null;
-    roleId: number | null;
+    password: string;
+    photoId: string | null;
+    roleId: string | null;
     status: STATUS;
-  }
-}
-
-export declare namespace IQuery {
-  export interface List {
-    items: IEntity.User[];
-    meta: IMeta;
-  }
-
-  export interface Single {
-    item: IEntity.User;
-  }
-
-  export interface Delete {
-    id: string;
   }
 }
