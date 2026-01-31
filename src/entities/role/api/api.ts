@@ -17,7 +17,7 @@ export const List = ({ params }: { params: IParams }): AxiosPromise<Types.IApi.L
     search: params.filter
   });
 
-export const Single = ({ id }: { id: string }): AxiosPromise<Types.IApi.Single.Response> =>
+export const Single = ({ id }: { id: number }): AxiosPromise<Types.IApi.Single.Response> =>
   http.get(`/admin/roles/${id}`);
 
 export const Create = ({ values }: { values: Types.IForm.Values }): AxiosPromise<Types.IApi.Single.Response> =>

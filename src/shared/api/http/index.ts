@@ -28,7 +28,6 @@ class Http {
       }
     });
 
-    // Request interceptor
     this.instance.interceptors.request.use(config => {
       const token = authHandlers?.getToken?.();
       if (token) {
@@ -37,7 +36,6 @@ class Http {
       return config;
     });
 
-    // Response interceptor
     this.instance.interceptors.response.use(
       response => response,
       (error: AxiosError) => {

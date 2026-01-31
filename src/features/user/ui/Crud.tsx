@@ -1,8 +1,10 @@
-import { UserForm, useDelete, useSingle } from '@/entities/user';
-import * as Forms from '@/entities/user/forms';
 import { EntityCreate } from '@/shared/ui/crud/EntityCreate';
 import { EntityDelete } from '@/shared/ui/crud/EntityDelete';
 import { EntityUpdate } from '@/shared/ui/crud/EntityUpdate';
+
+import { UserForm, useDelete, useSingle } from '@/entities/user';
+import * as Forms from '@/entities/user/forms';
+import * as Mappers from '@/entities/user/model/mappers';
 
 interface CreateProps {
   onCancel: () => void;
@@ -29,6 +31,7 @@ export const Update = ({ id, onCancel }: UpdateProps) => (
     useSingle={useSingle}
     UpdateWrapper={Forms.Update}
     FormComponent={UserForm}
+    mapValues={Mappers.getFormValues}
   />
 );
 

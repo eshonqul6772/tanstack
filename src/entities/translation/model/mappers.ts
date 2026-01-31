@@ -11,3 +11,10 @@ export const getData = (item?: any): Types.IEntity.Data => ({
   types: get(item, 'types') || [],
   status: get(item, 'status') || ''
 });
+
+export const getFormValues = (item?: Types.IEntity.Data): Types.IForm.Values => ({
+  name: item?.name || { uz: '', ru: '', en: '' },
+  tag: item?.tag || '',
+  types: item?.types || [],
+  status: item?.status || ''
+});

@@ -20,6 +20,8 @@ export declare namespace IEntity {
     id: number | null;
     photo: IMinFile;
     role: IIdAndName;
+    photoId?: string | null;
+    roleId?: string | null;
     createdAt: string;
     updatedAt: string;
   }

@@ -3,6 +3,7 @@ import { EntityDelete } from '@/shared/ui/crud/EntityDelete';
 import { EntityUpdate } from '@/shared/ui/crud/EntityUpdate';
 
 import { Form, useDelete, useSingle } from '@/entities/role';
+import * as Mappers from '@/entities/role/model/mappers';
 import * as Forms from '@/entities/role/forms';
 
 interface CreateProps {
@@ -24,7 +25,14 @@ export const Create = ({ onCancel }: CreateProps) => (
 );
 
 export const Update = ({ id, onCancel }: UpdateProps) => (
-  <EntityUpdate id={id} onCancel={onCancel} useSingle={useSingle} UpdateWrapper={Forms.Update} FormComponent={Form} />
+  <EntityUpdate
+    id={id}
+    onCancel={onCancel}
+    useSingle={useSingle}
+    UpdateWrapper={Forms.Update}
+    FormComponent={Form}
+    mapValues={Mappers.getFormValues}
+  />
 );
 
 export const Delete = ({ id, onCancel }: DeleteProps) => (
