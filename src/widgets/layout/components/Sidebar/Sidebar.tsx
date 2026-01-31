@@ -1,12 +1,11 @@
 import type React from 'react';
-import { useState } from 'react';
 import { Link, useLocation } from '@tanstack/react-router';
-import { ActionIcon, Box, Collapse, Group, NavLink, Stack, Text, Title, rem } from '@mantine/core';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { Box, NavLink, Stack, Text, Title, rem } from '@mantine/core';
+import cx from 'classnames';
 
 import { useAuth } from '@/features/auth/hooks/useAuth';
 
-import { DEFAULT_EXPANDED_SECTIONS, MENU_SECTIONS, type MenuItem } from './menu';
+import { MENU_ITEMS, type MenuItem } from './menu';
 import styles from './Sidebar.module.scss';
 
 interface SidebarProps {
@@ -14,15 +13,11 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpenMenu }) => {
-  const [expandedSections, setExpandedSections] = useState<string[]>(DEFAULT_EXPANDED_SECTIONS);
   const location = useLocation();
   const auth = useAuth();
 
-  const toggleSection = (section: string) => {
-    setExpandedSections(prev => (prev.includes(section) ? prev.filter(s => s !== section) : [...prev, section]));
-  };
-
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) =>
+    location.pathname === path || location.pathname.startsWith(`${path}/`);
 
   const hasPermission = (item: MenuItem): boolean => {
     if (!item.permission || item.permission.length === 0) {
@@ -42,7 +37,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpenMenu }) => {
           leftSection={<span style={{ fontSize: rem(18) }}>{item.icon}</span>}
           active={isActive(item.path)}
           title={!isOpenMenu ? item.label : ''}
-          classNames={{ root: styles.navLink }}
+          className={cx(styles.navLink, isActive(item.path) && styles.navLinkActive)}
         />
       ))}
     </Stack>
@@ -59,45 +54,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpenMenu }) => {
       )}
 
       <Stack component="nav" gap="lg" className={styles.nav}>
-        {MENU_SECTIONS.map(section => (
-          <Box key={section.id}>
-            <Group
-              justify={isOpenMenu ? 'space-between' : 'center'}
-              onClick={() => toggleSection(section.id)}
-              style={{
-                cursor: 'pointer',
-                padding: 'var(--mantine-spacing-xs) var(--mantine-spacing-sm)',
-                borderRadius: 'var(--mantine-radius-md)',
-                userSelect: 'none'
-              }}
-              className={styles.hoverBg}
-            >
-              {!isOpenMenu && (
-                <ActionIcon variant="subtle" size="lg" radius="md" title={section.label}>
-                  <span style={{ fontSize: rem(18) }}>{section.icon}</span>
-                </ActionIcon>
-              )}
-              {isOpenMenu && (
-                <>
-                  <Group gap="xs">
-                    <span style={{ fontSize: rem(16) }}>{section.icon}</span>
-                    <Text size="xs" fw={600} tt="uppercase" c="dimmed">
-                      {section.label}
-                    </Text>
-                  </Group>
-                  {expandedSections.includes(section.id) ? <ChevronUp /> : <ChevronDown />}
-                </>
-              )}
-            </Group>
-            <Collapse
-              in={expandedSections.includes(section.id)}
-              transitionDuration={300}
-              transitionTimingFunction="ease-in-out"
-            >
-              {renderMenuItems(section.items)}
-            </Collapse>
-          </Box>
-        ))}
+        {renderMenuItems(MENU_ITEMS)}
       </Stack>
 
       {isOpenMenu && (

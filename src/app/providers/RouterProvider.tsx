@@ -50,9 +50,8 @@ const RouterProvider = () => {
   React.useEffect(() => {
     router.invalidate().then(r => r);
 
-    // Logout qilganda login pagega redirect qil
     if (!auth.isAuthenticated && auth.isFetched && !auth.token) {
-      router.navigate({ to: '/login' });
+      router.navigate({to: '/login'}).then(r =>r);
     }
   }, [auth.isAuthenticated, auth.isFetched, auth.token]);
 
