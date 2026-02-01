@@ -23,12 +23,12 @@ const Sidebar: React.FC<SidebarProps> = ({isOpenMenu}) => {
     if (!item.permission || item.permission.length === 0) {
       return true;
     }
-    return item.permission.some(perm => auth.profile.permissions.includes(perm));
+    return item.permission.some(perm => auth.profile?.permissions.includes(perm));
   };
 
   return (
     <Box component="aside" className={styles.sidebar} style={{
-      width: isOpenMenu ? '256px' : '80px',
+      width: isOpenMenu ? '300px' : '80px',
     }}>
 
       <Stack component="nav" gap="lg" className={styles.nav}>
@@ -46,7 +46,7 @@ const Sidebar: React.FC<SidebarProps> = ({isOpenMenu}) => {
             leftSection={<span style={{fontSize: rem(18)}}>{item.icon}</span>}
             active={isActive(item.path)}
             title={!isOpenMenu ? item.label : ''}
-            className={cx(styles.navLink, isActive(item.path) && styles.navLinkActive)}
+            className={cx(styles.navLink, isActive(item.path) && styles.navLinkActive, !isOpenMenu && styles.navLinkCollapsed)}
           />
         ))}
       </Stack>

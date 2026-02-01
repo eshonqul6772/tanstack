@@ -24,7 +24,7 @@
 .nav {
   flex: 1;
   overflow-y: auto;
-  padding: 12px;
+  padding:  0;
   gap: 12px;
   display: flex;
   flex-direction: column;
@@ -72,6 +72,18 @@
 
 .navLink {
   border-radius: var(--mantine-radius-md);
+}
+
+.navLinkCollapsed {
+  justify-content: center;
+
+  :global(.mantine-NavLink-section) {
+    margin: 0;
+  }
+
+  :global(.mantine-NavLink-body) {
+    display: none;
+  }
 }
 
 .navLinkActive {

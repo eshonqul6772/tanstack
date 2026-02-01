@@ -1,5 +1,5 @@
 import type React from 'react';
-import { Anchor, Button, Container, Divider, Group, Loader, Paper, Stack, Text, Title } from '@mantine/core';
+import { Button, Container, Loader, Paper, Stack, Text, Title } from '@mantine/core';
 
 import storage from '@/shared/lib/storage';
 import * as Fields from '@/shared/ui/fields';
@@ -19,15 +19,6 @@ const Login: React.FC = () => {
         <div className={cls.contentWrapper}>
           <Paper radius="lg" p={60} className={cls.formCard}>
             <Stack gap={32} align="stretch">
-              <div className={cls.logoContainer}>
-                <div className={cls.logo}>
-                  <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <title>App logo</title>
-                    <path d="M20 2L28 8V20L20 26L12 20V8L20 2Z" fill="#1971C2" />
-                  </svg>
-                </div>
-              </div>
-
               <Stack gap={8}>
                 <Title order={1} size="h2" fw={600} ta="left">
                   Welcome back!
@@ -59,12 +50,6 @@ const Login: React.FC = () => {
                       <Fields.Text name="password" type={'password'} validation={{ required: true }} form={form} />
                     </Stack>
 
-                    <Group justify="flex-end" mb={8}>
-                      <Anchor component="button" type="button" size="sm" c="#1971C2" fw={500}>
-                        Forgot password
-                      </Anchor>
-                    </Group>
-
                     <Button
                       type="submit"
                       disabled={form.submitting}
@@ -77,32 +62,6 @@ const Login: React.FC = () => {
                     >
                       {form.submitting ? <Loader size="xs" color="white" /> : 'Sign In'}
                     </Button>
-
-                    <Group my={12}>
-                      <Divider style={{ flex: 1 }} />
-                      <Text size="sm" c="gray" fw={500}>
-                        or continue with
-                      </Text>
-                      <Divider style={{ flex: 1 }} />
-                    </Group>
-
-                    <Group grow>
-                      <Button variant="light" radius="md" size="md" fw={500} c="dark">
-                        Google
-                      </Button>
-                      <Button variant="light" radius="md" size="md" fw={500} c="dark">
-                        Github
-                      </Button>
-                    </Group>
-
-                    <Group justify="center" mt={16}>
-                      <Text size="sm" c="gray">
-                        Don't have an account yet?{' '}
-                        <Anchor component="button" type="button" fw={600} c="#1971C2">
-                          Sign up
-                        </Anchor>
-                      </Text>
-                    </Group>
                   </Stack>
                 )}
               </Forms.Login>

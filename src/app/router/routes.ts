@@ -48,7 +48,17 @@ export const allRoutes = [
     metadata: {
       title: 'Roles',
       requiresAuth: true,
-      requiredPermissions: ['VIEW_ROLE'] as PERMISSIONS[]
+      requiredPermissions: ['TEXTPATH_METHODTYPE_STRETCH'] as PERMISSIONS[]
+    }
+  },
+  {
+    key: 'no-access',
+    path: '/no-access',
+    component: () => import('@/pages/NoAccess'),
+    metadata: {
+      title: 'No Access',
+      requiresAuth: true,
+      requiredPermissions: [] as PERMISSIONS[]
     }
   }
 ] as const;

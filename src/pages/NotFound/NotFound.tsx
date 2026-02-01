@@ -2,7 +2,7 @@ import type React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { Box, Button, Center, Container, Group, Stack, Text, Title } from '@mantine/core';
-import { ArrowLeft, Bug } from 'lucide-react';
+import { ArrowLeft, FileQuestion } from 'lucide-react';
 
 const NotFound: React.FC = () => {
   const { t } = useTranslation();
@@ -12,22 +12,18 @@ const NotFound: React.FC = () => {
     <Center style={{ minHeight: '60vh' }}>
       <Container size="sm">
         <Stack gap="lg" align="center">
-          {/* Icon */}
-          <Box style={{ fontSize: 120, opacity: 0.7 }}>
-            <Bug size={120} color="var(--mantine-colors-blue-6)" />
+          <Box style={{ opacity: 0.7 }}>
+            <FileQuestion size={100} color="var(--mantine-color-blue-6)" />
           </Box>
 
-          {/* Title */}
           <Title order={1} size="h1" ta="center">
             404
           </Title>
 
-          {/* Description */}
           <Text size="lg" c="dimmed" ta="center">
-            {t('not_found')}
+            {t('not_found') || 'Sahifa topilmadi'}
           </Text>
 
-          {/* Buttons */}
           <Group gap="md">
             <Button
               size="md"
@@ -37,9 +33,6 @@ const NotFound: React.FC = () => {
               onClick={() => navigate({ to: '/dashboard' })}
             >
               {t('back_to_dashboard') || 'Dashboard'}
-            </Button>
-            <Button size="md" variant="outline" color="blue" onClick={() => navigate({ to: '/' })}>
-              {t('home') || 'Home'}
             </Button>
           </Group>
         </Stack>

@@ -33,8 +33,22 @@ const rootRoute = createRootRouteWithContext<RouterContext>()({
 const layoutRoute = createRoute({
   getParentRoute: () => rootRoute,
   id: 'layout',
-  component: MainLayout,
-  notFoundComponent: NotFound
+  component: MainLayout
+});
+
+// 🔹 Catch-all route - noma'lum path uchun NotFound (layout ichida)
+const catchAllRoute = createRoute({
+  getParentRoute: () => layoutRoute,
+  path: '$',
+  component: NotFound,
+  beforeLoad: ({ context }) => {
+    if (!context.auth.isFetched) {
+      return;
+    }
+    if (!context.auth.isAuthenticated) {
+      throw redirect({ to: '/login' });
+    }
+  }
 });
 
 const IndexComponent = () => null;
@@ -111,7 +125,7 @@ const protectedRoutes = appRoutes.filter((_, index) => allRoutes[index].metadata
 
 const publicRoutes = appRoutes.filter((_, index) => !allRoutes[index].metadata.requiresAuth);
 
-export const routeTree = rootRoute.addChildren([indexRoute, layoutRoute.addChildren(protectedRoutes), ...publicRoutes]);
+export const routeTree = rootRoute.addChildren([indexRoute, layoutRoute.addChildren([...protectedRoutes, catchAllRoute]), ...publicRoutes]);
 
 export const routeMap = Object.fromEntries(allRoutes.map((config, index) => [config.key, appRoutes[index]]));
 
